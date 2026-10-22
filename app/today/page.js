@@ -9,7 +9,7 @@ import { dayKey, weekOf, dayMarks, groupForDay, formatDeadline, relative, tomorr
 function TodayCard({ item, now, late, onChange }) {
   return (
     <div className={`card ${late ? "late" : ""}`}>
-      <div className="act">{item.my_name || item.action}</div>
+      <Link className="act" href={`/item/${item.id}`}>{item.my_name || item.action}</Link>
       {item.my_name ? <div className="orig">{item.action}</div> : null}
       <div className="orig">{[item.company, item.role].filter(Boolean).join(" · ")}</div>
       {item.deadline ? (
@@ -41,7 +41,10 @@ export default function TodayPage() {
 
   return (
     <AppShell reviewCount={proposedCount} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
-      <h1 className="page-title">{selected === today ? "Today" : `${selectedDay?.label} ${selectedDay?.num}`}</h1>
+      <div className="titlerow">
+        <h1 className="page-title">{selected === today ? "Today" : `${selectedDay?.label} ${selectedDay?.num}`}</h1>
+        <Link className="b" href="/add">+ Add</Link>
+      </div>
       <div className="strip" role="tablist" aria-label="This week">
         {days.map((d) => {
           const m = marks[d.key];
@@ -67,7 +70,13 @@ export default function TodayPage() {
       {due.map((item) => <TodayCard key={item.id} item={item} now={now} onChange={update} />)}
       {undated.length ? <div className="grp">No date</div> : null}
       {undated.map((item) => <TodayCard key={item.id} item={item} now={now} onChange={update} />)}
-      {!loading && nothing ? (
+      {!loading && items.length === 0 ? (
+        <div className="empty">
+          <strong>Nothing here yet.</strong>
+          <p>Catchit will fill this once your email is connected. Until then, <Link href="/add">add one yourself</Link>.</p>
+        </div>
+      ) : null}
+      {!loading && items.length > 0 && nothing ? (
         <div className="empty">
           <strong>{selected === today ? "You're clear." : "Nothing due this day."}</strong>
           {proposedCount ? <p>{proposedCount} found by Catchit are waiting. <Link href="/review">Go to Review</Link></p> : <p>Pick another day above.</p>}

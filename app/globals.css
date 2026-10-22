@@ -100,3 +100,7 @@ button { font: inherit; cursor: pointer; }
 .shell .content { max-width: none; margin: 0; padding: 0 16px; }
 .shell .card { border-left-color: var(--line); }
 .shell .card.late { border-left-color: var(--urgent); }
+.titlerow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.titlerow .b { min-height: 40px; padding: 8px 14px; }
+a.act { display: block; color: var(--ink); text-decoration: none; }
+.select, .area { display: block; width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: #fff; color: var(--ink); }
