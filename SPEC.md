@@ -174,3 +174,16 @@ Auto-apply, resume tailoring, CV-version memory, follow-up and auto-written repl
 - **WhatsApp:** the official Business API is for businesses messaging users. Meta bars general-purpose AI assistants on it from 15 Jan 2026, and unofficial libraries violate the terms with ban risk ([summary](https://zylos.ai/research/2026-01-26-whatsapp-api-automation/)). Not feasible by Monday.
 - **Claude:** a paid Claude subscription and the API are billed separately ([Anthropic help](https://support.claude.com/en/articles/9876003)).
 - **Gemini:** Google AI Pro does not cover API use; direct API use is billed separately ([Google](https://ai.google.dev/gemini-api/docs/google-ai-plans)). The Gemini API has a free tier with limits not stated on that page.
+
+## 17. As built (22 Oct 2026, night)
+
+What changed from the spec above, so this file matches the product:
+
+- **No paste box.** Gmail connect replaced it. Manual entry exists only as "Add manually" on Today, for things that did not come by email.
+- **Gmail:** read-only, last 14 days, up to 40 emails per scan, searches recruiter-style words (including exam, admit card, scheduled), skips sent mail, never reads the same email twice. Users sign in with Google; the account is made from the verified Google email. The app is in Google's testing mode, so only invited testers can connect.
+- **Demo:** shared demo account with sample emails and a Reset demo button, as specified.
+- **Detail screen:** stage (applied, assessment, interview, offer, rejected) and notes. "My name" for an item is set in Review's Edit.
+- **Extraction rules learned from real mail:** an event on a date (exam, interview) is an attend action whose deadline is its start or entry time; background notes and later rounds with no date are not actions; evidence may be two sentences; the model reads up to 6,000 characters.
+- **Model:** Gemini by default; Claude is used for real inbox mail when `ANTHROPIC_API_KEY` is set.
+- **Design:** bold, student-first style in the agreed palette (cream, green, orange-red), phone-first.
+- **Not built yet:** morning reminder email, calendar alarm file, test reminder, privacy page with Disconnect and Delete, laptop two-column layout.

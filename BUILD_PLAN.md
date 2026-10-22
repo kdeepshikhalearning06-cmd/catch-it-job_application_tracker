@@ -96,3 +96,17 @@ At least 4 commits a day, one per working slice, with messages that say what a p
 | Judges have no Gmail | Demo login with relative dates and a reset button |
 | Free-plan cron limits | One daily run; email arrives between 8 and 9 am; documented |
 | Scope grows | The priority list above is frozen; new ideas go below the line |
+
+## Progress (22 Oct 2026, night)
+
+| Slice | State |
+|---|---|
+| 0 Setup, keys, database | Done |
+| 1 Extraction with code checks | Done; 7 real-email cases |
+| 2 Demo login, Review, Today | Done, verified live |
+| 2b Detail, Add manually, landing redesign | Pushed |
+| 3 Accuracy test set | Started (7 cases); needs a holdout set |
+| 4 Gmail connect and scan | Working for the first tester; search widened |
+| 5 Reminders (email, calendar alarm, test button) | Not started |
+| 6 Testers, deck, launch | Not started |
+| Also open | Privacy page and Disconnect/Delete, laptop layout, lock `/api/extract-demo` before submission |
