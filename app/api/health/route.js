@@ -15,5 +15,14 @@ const NAMES = [
 export function GET() {
   const present = {};
   for (const name of NAMES) present[name] = Boolean(process.env[name]);
-  return Response.json({ ok: true, present });
+  // Shapes only, never values: lets us spot a stray space or a stale deployment.
+  const demo = {
+    emailLength: process.env.DEMO_EMAIL?.length ?? 0,
+    passwordLength: process.env.DEMO_PASSWORD?.length ?? 0,
+    hasStraySpace:
+      process.env.DEMO_EMAIL !== process.env.DEMO_EMAIL?.trim() ||
+      process.env.DEMO_PASSWORD !== process.env.DEMO_PASSWORD?.trim(),
+  };
+  const build = (process.env.VERCEL_GIT_COMMIT_SHA || "local").slice(0, 7);
+  return Response.json({ ok: true, build, present, demo });
 }
