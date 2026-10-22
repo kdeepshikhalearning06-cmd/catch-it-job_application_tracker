@@ -54,7 +54,9 @@ export async function POST(request) {
     const ids = (list.messages ?? []).map((m) => m.id);
     const { data: seen } = await admin.from("scanned_messages").select("message_id").eq("user_id", user.id).in("message_id", ids.length ? ids : ["-"]);
     const done = new Set((seen ?? []).map((r) => r.message_id));
-    const todo = ids.filter((id) => !done.has(id));
+    // Right after connecting, read everything again (items are de-duplicated by the database).
+    const force = new URL(request.url).searchParams.get("force") === "1";
+    const todo = force ? ids : ids.filter((id) => !done.has(id));
 
     const found = [];
     let read = 0;

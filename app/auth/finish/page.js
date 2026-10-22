@@ -22,7 +22,7 @@ export default function Finish() {
         if (error) throw error;
         window.history.replaceState(null, "", "/auth/finish");
         setMessage("Reading the last 14 days of your email. This can take up to a minute…");
-        await scanGmail();
+        await scanGmail({ force: true });
         router.replace("/review");
       } catch (err) {
         setFailed(true);
