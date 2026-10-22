@@ -6,7 +6,11 @@ Status: draft for Deepshikha to red-team, Thu 22 Oct 2026. This file is the brie
 
 ## 1. Problem
 
-[PASTE DEEPSHIKHA'S REWRITTEN PROBLEM SENTENCE HERE]
+A fresher or student who applies to several roles a week, mostly from a phone, with no tracking system and no one reminding them, misses the time-bound actions companies send them, such as an assessment link or an interview invite, because those messages arrive in email, LinkedIn DMs and WhatsApp and nobody logs them. Today they rely on the Notes app, screenshots or a half-kept spreadsheet, and it fails the moment they are busy. One person forgot an assessment link that came by email and was dropped from the process. Another missed an interview scheduled by DM while in college.
+
+**Catchit** finds those messages for them (Gmail first, paste for the rest), shows what they must do and by when, reminds them in time, and keeps every job and its stage in one place, so no deadline slips by unnoticed. The user stays in control: Catchit proposes, they confirm.
+
+(Rewritten 22 Oct from the living spec v1 plus the decision to auto-capture instead of asking users to paste. Deepshikha to edit in her own words.)
 
 **Evidence (real):**
 - Apurva (MMS, 10-15 applications a week) forgot an assessment link that came by email and was dropped from a summer internship.
@@ -33,7 +37,7 @@ Sign in → connect Gmail (or use the demo inbox, or paste a message) → the ap
 | 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). Sign in with Google, or "Try the demo". | Get started |
 | 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, and the quoted sentence it came from. A "Paste a message" box for LinkedIn/WhatsApp text. A scanning state with a live count. | Confirm (per card) |
 | 3 | Today | Confirmed items grouped: Overdue, Today, This week, Later. Done and Snooze on each. | Done (per item) |
-| 4 | Detail | Company, role, action, deadline, link, original email text, notes, status. | Save |
+| 4 | Detail | Company, role, stage (Applied, Assessment, Interview, Offer, Rejected), action, deadline, link, original email text, notes. | Save |
 
 Empty states: Review with nothing found says "No company actions in the last 14 days" and offers the paste box. Today with nothing says "You're clear" and links to Review.
 
