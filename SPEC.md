@@ -1,6 +1,20 @@
 # Catchit: spec v1
 
-Status: draft for Deepshikha to red-team, Thu 22 Oct 2026. This file is the brief we hand to the coding agent (Claude Code / Antigravity). Evidence vs assumption is labelled. Nothing here is invented research.
+Status: v1.1, updated Thu 22 Oct 2026 evening for Deepshikha to red-team. This file is the brief we hand to the coding agent (Claude Code / Antigravity). Evidence vs assumption is labelled. Nothing here is invented research.
+
+---
+
+## One-page summary
+
+- **User:** a fresher or student applying to several roles a week, on phone and laptop, with no tracking system and no college reminders.
+- **Problem:** company actions (assessment links, interview invites, form or document deadlines) arrive by email, LinkedIn DM and WhatsApp, nobody logs them, and one miss costs an internship or an interview.
+- **What Catchit does:** connects to Gmail (read-only, last 14 days), pulls out "do this thing by this time" with the exact sentence it came from, lets the user confirm, edit or rename it, then puts it on a Today list and sets a phone calendar alarm and a morning email.
+- **Connectors:** Gmail (live), Paste a message (live, covers LinkedIn and WhatsApp text), "Send to Catchit" Chrome extension (stretch, only if the core works by Sat evening; otherwise shown as "coming next").
+- **Aha moment:** after connecting, the user sees a deadline they had forgotten, already pulled out, in under 2 minutes.
+- **Why not ChatGPT, Gmail or Calendar:** it remembers across applications, finds the deadline without being asked, and reminds you. Google's help page for Calendar "Events from Gmail" lists flights, hotels and tickets, not assessments or interview invites. Competitors (Simplify, G-Track) are untested; their pages mention no assessment-deadline reminders.
+- **Screens (4):** Landing + sign in, Review, Today, Detail. Phone and laptop are designed side by side.
+- **Out of scope:** auto-apply, resume tools, Kanban board, auto-written replies, reading LinkedIn or WhatsApp automatically, two-way calendar sync.
+- **Success:** 3 of 5 testers confirm an item; 2 of 5 find a forgotten deadline; 90% or more on the 30-email test set; zero invented deadlines.
 
 ---
 
@@ -22,11 +36,13 @@ A fresher or student who applies to several roles a week, mostly from a phone, w
 
 ## 2. User
 
-A fresher or student applying to several roles a week, mostly from a phone, with no tracking system and no college sending reminders. Not for people who already run a sheet well.
+A fresher or student applying to several roles a week, with no tracking system and no college sending reminders. Not for people who already run a sheet well.
+
+**Devices (decided 22 Oct):** testers use both phone and laptop, so every screen is designed for both side by side, not laptop first. Interviews so far lean phone (Anushka, one survey respondent); Deepshikha's contacts mostly use laptops. We will ask each Sunday tester which device they check first.
 
 ## 3. The one journey
 
-Sign in → connect Gmail (or use the demo inbox, or paste a message) → the app proposes "Do X by Y" from company emails → user taps Confirm, Edit or Dismiss → confirmed items sit on the Today list → an email reminder arrives the morning they are due.
+Sign in → connect Gmail (or use the demo inbox, or paste a message) → the app proposes "Do X by Y" from company emails → user taps Confirm, Edit or Dismiss → confirmed items sit on the Today list → a calendar alarm on their phone fires 1 day and 2 hours before, and an email reminder arrives the morning they are due.
 
 **Aha moment (target under 2 minutes):** after connecting, the user sees a deadline they had forgotten, already pulled out, without typing anything.
 
@@ -34,9 +50,9 @@ Sign in → connect Gmail (or use the demo inbox, or paste a message) → the ap
 
 | # | Screen | What's on it | One main button |
 |---|---|---|---|
-| 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). Sign in with Google, or "Try the demo". | Get started |
-| 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, and the quoted sentence it came from. A "Paste a message" box for LinkedIn/WhatsApp text. A scanning state with a live count. | Confirm (per card) |
-| 3 | Today | Confirmed items grouped: Overdue, Today, This week, Later. Done and Snooze on each. | Done (per item) |
+| 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). A **Connectors row** of three cards with honest status: Gmail (Connect, live), Paste a message (Use, live), Chrome extension for LinkedIn and WhatsApp Web ("Coming next" unless built). Sign in with Google, or "Try the demo". | Get started |
+| 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, the quoted sentence it came from, and a **"My name"** field to rename the item in the user's own words. A "Paste a message" box for LinkedIn/WhatsApp text. A scanning state with a live count. | Confirm (per card) |
+| 3 | Today | Confirmed items grouped: Overdue, Today, This week, Later. Done, Snooze and "Add to calendar" on each. Items show the user's own name if they set one, with the original action underneath. | Done (per item) |
 | 4 | Detail | Company, role, stage (Applied, Assessment, Interview, Offer, Rejected), action, deadline, link, original email text, notes. | Save |
 
 Empty states: Review with nothing found says "No company actions in the last 14 days" and offers the paste box. Today with nothing says "You're clear" and links to Review.
@@ -54,7 +70,9 @@ Empty states: Review with nothing found says "No company actions in the last 14 
 3. **Paste a message.** As a user, I paste a LinkedIn or WhatsApp message and get the same proposal card.
 4. **Today list.** As a user, I see what's due, overdue first. Done and Snooze (1 day) work and are saved.
 5. **Reminder.** As a user, I get one email at 8 am IST on any day I have something due or overdue, listing those items with links. No email if nothing is due.
-6. **Demo.** As a judge, I tap "Try the demo" and get the full journey on a sample inbox of 10 clearly labelled sample emails, with no Google sign-in needed.
+   - **Phone calendar alarm.** When I confirm an item, I can tap "Add to calendar" and get a calendar file (.ics) with two alarms, 1 day and 2 hours before. The default is on and I can change the times on the card. Hypothesis from Deepshikha's idea and Claude's knowledge, to be tested on an Android phone and an iPhone on Friday. If it fails, the email is the reminder.
+6. **My name.** As a user, I can rename any item in my own words (for example "Infosys test" instead of "Complete the online assessment"). My name shows on Today and Detail, and the original action stays visible underneath. The original is never overwritten.
+7. **Demo.** As a judge, I tap "Try the demo" and get the full journey on a sample inbox of 10 clearly labelled sample emails, with no Google sign-in needed.
 
 ## 6. AI: what it does and doesn't do
 
@@ -102,7 +120,7 @@ Golden set of 30 emails in `evals/golden.jsonl`: 15 real actions, 10 non-actions
 
 ## 9. Events to track
 
-`signed_in`, `demo_started`, `gmail_connected`, `scan_completed` (count found), `proposal_confirmed`, `proposal_edited`, `proposal_dismissed`, `paste_used`, `item_done`, `item_snoozed`, `reminder_sent`, `reminder_clicked`.
+`signed_in`, `demo_started`, `gmail_connected`, `scan_completed` (count found), `proposal_confirmed`, `proposal_edited`, `proposal_dismissed`, `paste_used`, `item_renamed`, `calendar_added`, `item_done`, `item_snoozed`, `reminder_sent`, `reminder_clicked`.
 
 ## 10. Edge cases
 
@@ -116,11 +134,13 @@ Golden set of 30 emails in `evals/golden.jsonl`: 15 real actions, 10 non-actions
 
 ## 11. Stack
 
-Next.js on Vercel (free plan), Supabase for data and sign-in, Gmail API (read-only) through a Google Cloud project in testing mode with testers added by email, Claude API for extraction, Resend free tier for the 8 am email triggered by a Vercel cron job once a day. Secrets only in Vercel environment variables, `.env` in `.gitignore`.
+Next.js on Vercel (free plan), Supabase for data and sign-in, Gmail API (read-only) through a Google Cloud project in testing mode with testers added by email, Claude API for extraction, Resend free tier for the 8 am email triggered by a Vercel cron job once a day, and a generated .ics file for the calendar alarm (no extra Google permission needed). Secrets only in Vercel environment variables, `.env` in `.gitignore`.
 
 ## 12. Out of scope (v1)
 
-Auto-apply, resume tailoring, CV-version memory, follow-up message drafting, job discovery, recruiter email finding, referrals, analytics dashboards, reading LinkedIn DMs or WhatsApp automatically, a phone app, a browser extension, calendar sync, push notifications, multiple Gmail accounts.
+Auto-apply, resume tailoring, CV-version memory, follow-up and auto-written reply drafting (Simplify sells this on its paid plan; revisit after the deadline catching is solid), job discovery, recruiter email finding, referrals, analytics dashboards, reading LinkedIn DMs or WhatsApp automatically (it breaks their terms), a native phone app, two-way calendar sync, push notifications, multiple Gmail accounts, a Kanban board.
+
+**Stretch (only if the core works by Sat 24 Oct evening):** a small Chrome extension with one action. The student selects text on LinkedIn or WhatsApp Web, right-clicks "Send to Catchit", and a card appears in Review. User-chosen, no scraping. Shared as an unpacked build with install steps on GitHub; not submitted to the Chrome Web Store before the deadline.
 
 ## 13. Build order
 
@@ -130,11 +150,13 @@ Auto-apply, resume tailoring, CV-version memory, follow-up message drafting, job
 4. Golden set + eval script.
 5. Connect Gmail and scan (hard stop Sat 24 Oct, 2 pm IST; if not working, ship without and label "coming next").
 6. 8 am reminder email.
-7. Event tracking, empty states, phone layout polish.
+7. Calendar file with two alarms on confirm; "My name" field.
+8. Event tracking, empty states, phone and laptop layout polish.
+9. Stretch: "Send to Catchit" Chrome extension.
 
 ## 14. Open questions for Deepshikha
 
 1. ~~Name~~ Decided 22 Oct: Catchit.
-2. Is sign-in with Google acceptable to your testers, or do they want email only?
-3. Are 14 days the right scan window, or should it be 30?
+2. ~~Google sign-in~~ Decided 22 Oct: fine for testers.
+3. ~~Scan window~~ Decided 22 Oct: 14 days.
 4. Which 5 testers, and what are their Gmail addresses (needed to add them as test users)?
