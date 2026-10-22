@@ -52,7 +52,7 @@ Sign in → connect Gmail (or use the demo inbox, or paste a message) → the ap
 |---|---|---|---|
 | 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). A **Connectors row** of three cards with honest status: Gmail (Connect, live), Paste a message (Use, live), Chrome extension for LinkedIn and WhatsApp Web ("Coming next" unless built). Sign in with Google, or "Try the demo". | Get started |
 | 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, the quoted sentence it came from, and a **"My name"** field to rename the item in the user's own words. A "Paste a message" box for LinkedIn/WhatsApp text. A scanning state with a live count. | Confirm (per card) |
-| 3 | Today | Confirmed items grouped: Overdue, Today, This week, Later. Done, Snooze and "Add to calendar" on each. Items show the user's own name if they set one, with the original action underneath. | Done (per item) |
+| 3 | Today (main screen) | A **week strip** across the top (Mon to Sun, a dot on days with something due; tap a day to see it). Below it, that day's list, with Overdue on top when viewing today. On a laptop the strip sits beside the list. Confirmed items are also grouped: Overdue, Today, This week, Later. Done, Snooze and "Add to calendar" on each. Items show the user's own name if they set one, with the original action underneath. | Done (per item) |
 | 4 | Detail | Company, role, stage (Applied, Assessment, Interview, Offer, Rejected), action, deadline, link, original email text, notes. | Save |
 
 Empty states: Review with nothing found says "No company actions in the last 14 days" and offers the paste box. Today with nothing says "You're clear" and links to Review.
@@ -68,7 +68,7 @@ Empty states: Review with nothing found says "No company actions in the last 14 
    - Confirm, Edit (change action, date, time) and Dismiss all work and are saved.
    - A proposal with no written date shows "No date found, add one". The app never guesses a date.
 3. **Paste a message.** As a user, I paste a LinkedIn or WhatsApp message and get the same proposal card.
-4. **Today list.** As a user, I see what's due, overdue first. Done and Snooze (1 day) work and are saved.
+4. **Today list and week strip.** As a user, I see what's due, overdue first, and a week strip showing which days have something due. Tapping a day shows that day's items. Done and Snooze (1 day) work and are saved. The strip only reads dates of confirmed items; it does not sync with Google Calendar both ways. A full month grid is out of scope.
 5. **Reminder.** As a user, I get one email at 8 am IST on any day I have something due or overdue, listing those items with links. No email if nothing is due.
    - **Phone calendar alarm.** When I confirm an item, I can tap "Add to calendar" and get a calendar file (.ics) with two alarms, 1 day and 2 hours before. The default is on and I can change the times on the card. Hypothesis from Deepshikha's idea and Claude's knowledge, to be tested on an Android phone and an iPhone on Friday. If it fails, the email is the reminder.
 6. **My name.** As a user, I can rename any item in my own words (for example "Infosys test" instead of "Complete the online assessment"). My name shows on Today and Detail, and the original action stays visible underneath. The original is never overwritten.
@@ -120,7 +120,7 @@ Golden set of 30 emails in `evals/golden.jsonl`: 15 real actions, 10 non-actions
 
 ## 9. Events to track
 
-`signed_in`, `demo_started`, `gmail_connected`, `scan_completed` (count found), `proposal_confirmed`, `proposal_edited`, `proposal_dismissed`, `paste_used`, `item_renamed`, `calendar_added`, `item_done`, `item_snoozed`, `reminder_sent`, `reminder_clicked`.
+`signed_in`, `demo_started`, `gmail_connected`, `scan_completed` (count found), `proposal_confirmed`, `proposal_edited`, `proposal_dismissed`, `paste_used`, `day_selected`, `item_renamed`, `calendar_added`, `item_done`, `item_snoozed`, `reminder_sent`, `reminder_clicked`.
 
 ## 10. Edge cases
 
@@ -150,7 +150,7 @@ Auto-apply, resume tailoring, CV-version memory, follow-up and auto-written repl
 4. Golden set + eval script.
 5. Connect Gmail and scan (hard stop Sat 24 Oct, 2 pm IST; if not working, ship without and label "coming next").
 6. 8 am reminder email.
-7. Calendar file with two alarms on confirm; "My name" field.
+7. Week strip on Today (Sat); calendar file with two alarms on confirm; "My name" field.
 8. Event tracking, empty states, phone and laptop layout polish.
 9. Stretch: "Send to Catchit" Chrome extension.
 
