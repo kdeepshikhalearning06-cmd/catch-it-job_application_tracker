@@ -73,6 +73,9 @@ Empty states: Review with nothing found says "No company actions in the last 14 
    - **Phone calendar alarm.** When I confirm an item, I can tap "Add to calendar" and get a calendar file (.ics) with two alarms, 1 day and 2 hours before. The default is on and I can change the times on the card. Hypothesis from Deepshikha's idea and Claude's knowledge, to be tested on an Android phone and an iPhone on Friday. If it fails, the email is the reminder.
 6. **My name.** As a user, I can rename any item in my own words (for example "Infosys test" instead of "Complete the online assessment"). My name shows on Today and Detail, and the original action stays visible underneath. The original is never overwritten.
 7. **Demo.** As a judge, I tap "Try the demo" and get the full journey on a sample inbox of 10 clearly labelled sample emails, with no Google sign-in needed.
+   - **Demo account (added 22 Oct):** a shared login (email and password, given in the submission and the deck) opens the same seeded sample inbox. Sample deadlines are set relative to today, so Today always shows something overdue, due today and due this week. A "Reset demo" button restores the sample data, because several judges may use the one account.
+   - **"Send me a test reminder":** the judge types their own email and gets the morning reminder email once, on request. We do not email judges unasked.
+   - **Test scheduler (our side, for the testing week only):** an environment switch makes the daily background job send up to 5 sample reminders to an address we own, to check delivery. On Vercel's free plan this is one run a day that sends all 5 together, not five spread through the day. Off by default in the live app.
 
 ## 6. AI: what it does and doesn't do
 
