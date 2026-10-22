@@ -72,7 +72,25 @@ export async function POST(request) {
           const email = { subject: header(msg.payload, "Subject"), from, receivedAt, body: bodyText(msg.payload) };
           if (!from.toLowerCase().includes(own) && email.body) {
             const result = await extractEmail(email, { call });
-            for (const p of result.proposals) found.push({ ...p, id, receivedAt });
+            const rows = result.proposals.map((p) => ({
+              user_id: user.id,
+              source: "gmail",
+              gmail_message_id: id,
+              company: p.company,
+              role: p.role,
+              action: p.action,
+              deadline: p.deadline,
+              link: p.link,
+              evidence: p.evidence,
+              confidence: p.confidence,
+              status: "proposed",
+              received_at: receivedAt,
+            }));
+            for (const row of rows) {
+              const { error } = await admin.from("items").insert(row);
+              if (error && error.code !== "23505") throw error;
+              if (!error) found.push(row);
+            }
           }
           await admin.from("scanned_messages").upsert({ user_id: user.id, message_id: id });
           read += 1;
@@ -84,29 +102,11 @@ export async function POST(request) {
     };
     await Promise.all([worker(), worker(), worker()]);
 
-    if (found.length) {
-      const rows = found.map((p) => ({
-        user_id: user.id,
-        source: "gmail",
-        gmail_message_id: p.id,
-        company: p.company,
-        role: p.role,
-        action: p.action,
-        deadline: p.deadline,
-        link: p.link,
-        evidence: p.evidence,
-        confidence: p.confidence,
-        status: "proposed",
-        received_at: p.receivedAt,
-      }));
-      const { error } = await admin.from("items").upsert(rows, { onConflict: "user_id,gmail_message_id,action", ignoreDuplicates: true });
-      if (error) throw error;
-    }
     await admin.from("scan_state").upsert({ user_id: user.id, last_scan_at: new Date().toISOString() });
 
-    return Response.json({ ok: true, email: saved.email, found: found.length, read, failed, left: Math.max(0, todo.length - read - failed) });
+    return Response.json({ ok: true, email: saved.email, found: found.length, read, failed, total: ids.length, left: Math.max(0, todo.length - read - failed) });
   } catch (err) {
-    console.error("scan failed", err?.message);
+    console.error("scan failed", err?.message, err?.code);
     if (err.status === 401 || err.status === 403) return Response.json({ error: "not_connected" }, { status: 400 });
     return Response.json({ error: "The scan did not finish. Try again in a minute." }, { status: 500 });
   }
