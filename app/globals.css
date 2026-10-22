@@ -1,22 +1,13 @@
 :root {
-  --bg: #fafaf7;
+  --bg: #f9ebd7;
   --ink: #16181d;
-  --muted: #5b616e;
-  --accent: #0f766e;
+  --muted: #5b4f44;
+  --accent: #046a38;
   --accent-ink: #ffffff;
+  --urgent: #e34222;
+  --urgent-ink: #ba2f14;
   --card: #ffffff;
-  --line: #e4e4de;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111315;
-    --ink: #f1f1ec;
-    --muted: #a3a8b3;
-    --accent: #2dd4bf;
-    --accent-ink: #06201d;
-    --card: #1a1d20;
-    --line: #2a2e33;
-  }
+  --line: #e6d3b6;
 }
 * { box-sizing: border-box; }
 body {
@@ -43,11 +34,12 @@ h1 { font-size: 2rem; line-height: 1.15; margin: 16px 0 12px; letter-spacing: -0
 .card {
   background: var(--card);
   border: 1px solid var(--line);
+  border-left: 5px solid var(--urgent);
   border-radius: 12px;
   padding: 16px;
   margin: 32px 0 0;
 }
-.card .tag { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.card .tag { font-size: 0.75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 .card .what { font-weight: 600; margin: 4px 0; }
 .card .src { color: var(--muted); font-size: 0.9rem; font-style: italic; }
 h2 { font-size: 1.15rem; margin: 40px 0 8px; }
