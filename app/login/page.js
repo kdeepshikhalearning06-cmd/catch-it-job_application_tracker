@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase.mjs";
@@ -12,6 +12,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [gmailProblem, setGmailProblem] = useState("");
+
+  useEffect(() => {
+    const reason = new URLSearchParams(window.location.search).get("gmail");
+    if (!reason) return;
+    setGmailProblem(
+      reason === "denied"
+        ? "You chose not to connect Gmail. Nothing was read."
+        : "Gmail did not connect. If you are not an invited tester, Google blocks the sign-in. Try again, or use the demo.",
+    );
+  }, []);
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -51,8 +62,12 @@ export default function LoginPage() {
         </label>
         <button className="btn" disabled={busy} type="submit">Log in</button>
       </form>
-      <p className="note">Just looking? <button className="linkbtn" onClick={demo} disabled={busy}>Try the demo with sample emails</button></p>
+      <p className="note">
+        <a className="btn" href="/api/gmail/start">Connect my Gmail</a>
+      </p>
+      <p className="note">Gmail is open to invited testers while the app is in testing. Just looking? <button className="linkbtn" onClick={demo} disabled={busy}>Try the demo with sample emails</button></p>
       {message ? <p className="note error-text">{message}</p> : null}
+      {gmailProblem ? <p className="note error-text">{gmailProblem}</p> : null}
     </main>
   );
 }
