@@ -9,7 +9,7 @@ const NAMES = [
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "SUPABASE_SERVICE_ROLE_KEY",
   "DEMO_EMAIL",
-  "DEMO_PASSWORD",
+  "DEMO_PASSWORD", "EVAL_KEY",
 ];
 
 export function GET() {
