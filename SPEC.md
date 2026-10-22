@@ -69,7 +69,7 @@ Empty states: Review with nothing found says "No company actions in the last 14 
    - A proposal with no written date shows "No date found, add one". The app never guesses a date.
 3. **Messages Gmail cannot see.** As a user, LinkedIn messages that reach me as email notifications are picked up automatically with the rest. For anything else, I tap "Share to Catchit" (stretch) or use "Add manually" (backup) and get the same proposal card.
 4. **Today list and week strip.** As a user, I see what's due, overdue first, and a week strip showing which days have something due. Tapping a day shows that day's items. Done and Snooze (1 day) work and are saved. The strip only reads dates of confirmed items; it does not sync with Google Calendar both ways. A full month grid is out of scope.
-5. **Reminder.** As a user, I get one email at 8 am IST on any day I have something due or overdue, listing those items with links. No email if nothing is due.
+5. **Reminder.** As a user, I get one email between 8 and 9 am IST on any day I have something due or overdue, listing those items with links. No email if nothing is due.
    - **Phone calendar alarm.** When I confirm an item, I can tap "Add to calendar" and get a calendar file (.ics) with two alarms, 1 day and 2 hours before. The default is on and I can change the times on the card. Hypothesis from Deepshikha's idea and Claude's knowledge, to be tested on an Android phone and an iPhone on Friday. If it fails, the email is the reminder.
 6. **My name.** As a user, I can rename any item in my own words (for example "Infosys test" instead of "Complete the online assessment"). My name shows on Today and Detail, and the original action stays visible underneath. The original is never overwritten.
 7. **Demo.** As a judge, I tap "Try the demo" and get the full journey on a sample inbox of 10 clearly labelled sample emails, with no Google sign-in needed.
@@ -104,6 +104,8 @@ AI is used for one job only: reading one email and returning a structured propos
 **Model:** a small, fast Claude model for extraction (cheap per email). Our own API key on the server only, never in the browser or the repo.
 
 **Model and cost (decided 22 Oct, to confirm):** extraction goes through one function, so the model can be swapped. Default: a small Claude model with a prepaid balance in the Claude Console (a Claude chat subscription does not include API usage; see feasibility notes). Fallback: the Gemini API free tier. Testers' email text is sent to the model provider, so the privacy line on the landing page must say so.
+
+**Scan schedule (decided 22 Oct):** (1) on first connect, scan the last 14 days; (2) every time the user opens the app, scan only mail newer than the last scan, at most once every 15 minutes, plus a "Check now" button; (3) once a day in the background, before the morning email. Vercel's free plan allows cron jobs only once a day and may fire them up to 59 minutes late ([Vercel docs](https://vercel.com/docs/cron-jobs/usage-and-pricing)), so the morning email arrives between 8 and 9 am IST, not exactly 8. Items found in the background wait in Review as proposals, and only confirmed items trigger reminders. Gap: a deadline email that arrives mid-day is not seen until the user opens the app or the next morning. Fix if needed: Vercel Pro (per-minute cron) or an outside scheduler, both untested.
 
 ## 7. Success metrics
 
