@@ -5,8 +5,8 @@ export const dynamic = "force-dynamic";
 // Signs in as the shared demo user and hands the session to the browser.
 // The demo password never leaves the server.
 export async function POST() {
-  const email = process.env.DEMO_EMAIL;
-  const password = process.env.DEMO_PASSWORD;
+  const email = process.env.DEMO_EMAIL?.trim().toLowerCase();
+  const password = process.env.DEMO_PASSWORD?.trim();
   if (!email || !password) {
     return Response.json({ error: "The demo account is not set up yet." }, { status: 500 });
   }
