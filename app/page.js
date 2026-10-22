@@ -3,68 +3,95 @@ import DemoButton from "../components/DemoButton";
 import Typewriter from "../components/Typewriter";
 
 const CAUGHT = [
-  "Complete the online assessment by Sat, 11:59 PM",
-  "Join the interview on Wed at 4:00 PM",
-  "Submit the 3-question task by Mon, 10:00 AM",
+  "Do the assessment by Sat, 11:59 PM",
+  "Join the interview Wed, 4:00 PM",
+  "Submit the task by Mon, 10:00 AM",
 ];
+
+const TICKER = ["Assessment links", "Interview invites", "Form deadlines", "Document uploads", "Task submissions", "Reschedules"];
 
 export default function Home() {
   return (
-    <div className="landing">
-      <div className="blob b1" aria-hidden="true" />
-      <div className="blob b2" aria-hidden="true" />
-
-      <header className="lnav rise" style={{ "--d": "0ms" }}>
-        <span className="wordmark">Catchit<span className="star" aria-hidden="true">✳︎</span></span>
-        <Link href="/login" className="lnk">Log in</Link>
+    <div className="lp">
+      <header className="lp-nav">
+        <span className="lp-logo">Catchit<b aria-hidden="true">✳︎</b></span>
+        <Link href="/login" className="lp-login">Log in</Link>
       </header>
 
-      <section className="hero">
-        <div className="copy">
-          <p className="eyebrow rise" style={{ "--d": "80ms" }}>Ready when the next email lands</p>
-          <h1 className="headline"><span className="mask"><span className="up">Catch what companies ask you to do.</span></span></h1>
-          <p className="lede rise" style={{ "--d": "420ms" }}>
-            Assessment links, interview invites and deadlines get buried in your inbox.
-            Catchit finds them, quotes the exact sentence, and reminds you in time.
+      <section className="lp-hero">
+        <div className="lp-copy">
+          <span className="sticker s-green pop" style={{ "--d": "0ms" }}>For people applying to 10+ jobs</span>
+          <h1 className="lp-h1">
+            <span className="line"><span>Never miss</span></span>
+            <span className="line"><span>the <mark>test link</mark></span></span>
+            <span className="line"><span>again.</span></span>
+          </h1>
+          <p className="lp-lede pop" style={{ "--d": "500ms" }}>
+            Recruiters bury deadlines in long emails. Catchit digs out every test, interview and
+            deadline, and puts it on one list with an alarm on your phone.
           </p>
-          <div className="rise cta" style={{ "--d": "600ms" }}>
+          <div className="lp-cta pop" style={{ "--d": "650ms" }}>
             <DemoButton />
-            <a className="ghost" href="#how">See how it works</a>
+            <a className="lp-ghost" href="#how">How it works ↓</a>
           </div>
-          <p className="note rise" style={{ "--d": "700ms" }}>The demo uses sample emails, so you need no sign-in.</p>
+          <p className="lp-note pop" style={{ "--d": "750ms" }}>No sign-up for the demo. Sample emails only.</p>
         </div>
 
-        <div className="stage rise" style={{ "--d": "500ms" }} aria-label="Example of a caught action">
-          <div className="chip c1">Interview Invite from OyeLabs…</div>
-          <div className="chip c2">Re: Task for the next round</div>
-          <div className="chip c3">Your application update</div>
-          <div className="caught">
-            <div className="tag"><i className="pulse" />Caught from your email</div>
-            <Typewriter lines={CAUGHT} />
-            <div className="src">&ldquo;Please complete the assessment by 24 Oct, 11:59 PM IST.&rdquo;</div>
-            <div className="fake"><span>Confirm</span><span>Edit</span><span>Dismiss</span></div>
+        <div className="lp-phonewrap pop" style={{ "--d": "300ms" }}>
+          <div className="phone" aria-label="Example of the Today screen">
+            <div className="ph-top">Today</div>
+            <div className="ph-strip">
+              {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+                <span key={i} className={i === 2 ? "on" : ""}>{d}<b>{20 + i}</b></span>
+              ))}
+            </div>
+            <div className="ph-card late"><small>Overdue</small>Reply to Amex recruiter</div>
+            <div className="ph-card"><small>Today, 4:00 pm</small>Join the Webex interview</div>
+            <div className="ph-card"><small>Sat, 11:59 pm</small>Skills assessment</div>
           </div>
-          <p className="sample">Sample, not a real email.</p>
+          <div className="stk st1">📩 3 caught from your inbox</div>
+          <div className="stk st2">⏰ Alarm 2 hours before</div>
+          <div className="caught-card">
+            <div className="cc-tag"><i />Caught</div>
+            <Typewriter lines={CAUGHT} />
+            <div className="cc-q">&ldquo;Please complete it by 24 Oct, 11:59 PM IST.&rdquo;</div>
+          </div>
         </div>
       </section>
 
-      <footer className="glass" id="how">
-        <div className="cols">
-          <div className="col rise" style={{ "--d": "800ms" }}>
-            <h3>1. Connect</h3>
-            <p>Link Gmail once. Catchit reads only the last 14 days and never sends email.</p>
-          </div>
-          <div className="col rise" style={{ "--d": "880ms" }}>
-            <h3>2. Confirm</h3>
-            <p>It proposes what to do and by when. You tap Confirm, Edit or Dismiss.</p>
-          </div>
-          <div className="col rise" style={{ "--d": "960ms" }}>
-            <h3>3. Get reminded</h3>
-            <p>Confirmed items sit on Today, with a phone alarm and one morning email.</p>
-          </div>
+      <div className="ticker" aria-hidden="true">
+        <div className="track">
+          {[...TICKER, ...TICKER, ...TICKER, ...TICKER].map((t, i) => <span key={i}>{t} ✳︎</span>)}
         </div>
-        <p className="legal">Read-only Gmail access &middot; Built for the HelloPM Buildathon 2026</p>
-      </footer>
+      </div>
+
+      <section className="lp-how" id="how">
+        <h2>Three taps. That&rsquo;s it.</h2>
+        <div className="bento">
+          <article className="bx b-green">
+            <span className="n">1</span>
+            <h3>Connect Gmail</h3>
+            <p>Read-only. Only the last 14 days. We never send or delete anything.</p>
+          </article>
+          <article className="bx b-cream">
+            <span className="n">2</span>
+            <h3>Confirm what we found</h3>
+            <p>See the exact sentence from the email. Confirm, edit or dismiss.</p>
+          </article>
+          <article className="bx b-red">
+            <span className="n">3</span>
+            <h3>Get nudged in time</h3>
+            <p>One list for today. A phone alarm. One email the morning it&rsquo;s due.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="lp-final">
+        <h2>Your inbox has a deadline in it right now.</h2>
+        <DemoButton />
+      </section>
+
+      <footer className="lp-foot">Read-only Gmail &middot; Built for the HelloPM Buildathon 2026</footer>
     </div>
   );
 }
