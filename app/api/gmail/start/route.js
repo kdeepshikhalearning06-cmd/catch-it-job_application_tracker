@@ -9,7 +9,7 @@ export async function GET(request) {
   if (!clientId) return Response.json({ error: "Gmail is not set up yet." }, { status: 500 });
   const redirectUri = `${new URL(request.url).origin}/api/gmail/callback`;
   const state = randomBytes(16).toString("hex");
-  const res = Response.redirect(buildAuthUrl({ clientId, redirectUri, state }), 302);
-  res.headers.append("set-cookie", `catchit_oauth=${state}; HttpOnly; Secure; SameSite=Lax; Path=/api/gmail; Max-Age=600`);
-  return res;
+  const headers = new Headers({ location: buildAuthUrl({ clientId, redirectUri, state }) });
+  headers.append("set-cookie", `catchit_oauth=${state}; HttpOnly; Secure; SameSite=Lax; Path=/api/gmail; Max-Age=600`);
+  return new Response(null, { status: 302, headers });
 }

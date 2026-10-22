@@ -43,9 +43,9 @@ export async function GET(request) {
     if (verifyError) throw verifyError;
 
     const { access_token, refresh_token } = verified.session;
-    const res = Response.redirect(`${origin}/auth/finish#access_token=${access_token}&refresh_token=${refresh_token}`, 302);
-    res.headers.append("set-cookie", "catchit_oauth=; HttpOnly; Secure; Path=/api/gmail; Max-Age=0");
-    return res;
+    const headers = new Headers({ location: `${origin}/auth/finish#access_token=${access_token}&refresh_token=${refresh_token}` });
+    headers.append("set-cookie", "catchit_oauth=; HttpOnly; Secure; Path=/api/gmail; Max-Age=0");
+    return new Response(null, { status: 302, headers });
   } catch (err) {
     console.error("gmail callback failed", err?.message);
     return back(origin, "failed");
