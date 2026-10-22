@@ -9,7 +9,7 @@ Status: v1.1, updated Thu 22 Oct 2026 evening for Deepshikha to red-team. This f
 - **User:** a fresher or student applying to several roles a week, on phone and laptop, with no tracking system and no college reminders.
 - **Problem:** company actions (assessment links, interview invites, form or document deadlines) arrive by email, LinkedIn DM and WhatsApp, nobody logs them, and one miss costs an internship or an interview.
 - **What Catchit does:** connects to Gmail (read-only, last 14 days), pulls out "do this thing by this time" with the exact sentence it came from, lets the user confirm, edit or rename it, then puts it on a Today list and sets a phone calendar alarm and a morning email.
-- **Connectors:** Gmail (live), Paste a message (live, covers LinkedIn and WhatsApp text), "Send to Catchit" Chrome extension (stretch, only if the core works by Sat evening; otherwise shown as "coming next").
+- **Connectors (auto-fetch, no pasting):** Gmail (live). LinkedIn messages and job updates arrive through the user's LinkedIn email notifications in Gmail (hypothesis, to test Fri with a real account; there is no official way for an app to read a LinkedIn inbox). WhatsApp: no official way either, so a one-tap "Share to Catchit" (stretch; Chrome extension or phone share) is shown as "coming next". A small "Add manually" link stays inside Review as a backup only, not on the landing page.
 - **Aha moment:** after connecting, the user sees a deadline they had forgotten, already pulled out, in under 2 minutes.
 - **Why not ChatGPT, Gmail or Calendar:** it remembers across applications, finds the deadline without being asked, and reminds you. Google's help page for Calendar "Events from Gmail" lists flights, hotels and tickets, not assessments or interview invites. Competitors (Simplify, G-Track) are untested; their pages mention no assessment-deadline reminders.
 - **Screens (4):** Landing + sign in, Review, Today, Detail. Phone and laptop are designed side by side.
@@ -22,7 +22,7 @@ Status: v1.1, updated Thu 22 Oct 2026 evening for Deepshikha to red-team. This f
 
 A fresher or student who applies to several roles a week, mostly from a phone, with no tracking system and no one reminding them, misses the time-bound actions companies send them, such as an assessment link or an interview invite, because those messages arrive in email, LinkedIn DMs and WhatsApp and nobody logs them. Today they rely on the Notes app, screenshots or a half-kept spreadsheet, and it fails the moment they are busy. One person forgot an assessment link that came by email and was dropped from the process. Another missed an interview scheduled by DM while in college.
 
-**Catchit** finds those messages for them (Gmail first, paste for the rest), shows what they must do and by when, reminds them in time, and keeps every job and its stage in one place, so no deadline slips by unnoticed. The user stays in control: Catchit proposes, they confirm.
+**Catchit** finds those messages for them automatically from Gmail, including LinkedIn notification emails, with a one-tap share for what Gmail cannot see, shows what they must do and by when, reminds them in time, and keeps every job and its stage in one place, so no deadline slips by unnoticed. The user stays in control: Catchit proposes, they confirm.
 
 (Rewritten 22 Oct from the living spec v1 plus the decision to auto-capture instead of asking users to paste. Deepshikha to edit in her own words.)
 
@@ -42,7 +42,7 @@ A fresher or student applying to several roles a week, with no tracking system a
 
 ## 3. The one journey
 
-Sign in → connect Gmail (or use the demo inbox, or paste a message) → the app proposes "Do X by Y" from company emails → user taps Confirm, Edit or Dismiss → confirmed items sit on the Today list → a calendar alarm on their phone fires 1 day and 2 hours before, and an email reminder arrives the morning they are due.
+Sign in → connect Gmail (or use the demo inbox) → the app proposes "Do X by Y" from company emails → user taps Confirm, Edit or Dismiss → confirmed items sit on the Today list → a calendar alarm on their phone fires 1 day and 2 hours before, and an email reminder arrives the morning they are due.
 
 **Aha moment (target under 2 minutes):** after connecting, the user sees a deadline they had forgotten, already pulled out, without typing anything.
 
@@ -50,24 +50,24 @@ Sign in → connect Gmail (or use the demo inbox, or paste a message) → the ap
 
 | # | Screen | What's on it | One main button |
 |---|---|---|---|
-| 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). A **Connectors row** of three cards with honest status: Gmail (Connect, live), Paste a message (Use, live), Chrome extension for LinkedIn and WhatsApp Web ("Coming next" unless built). Sign in with Google, or "Try the demo". | Get started |
-| 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, the quoted sentence it came from, and a **"My name"** field to rename the item in the user's own words. A "Paste a message" box for LinkedIn/WhatsApp text. A scanning state with a live count. | Confirm (per card) |
+| 1 | Landing + sign in | One line on the problem, a 3-step "how it works", privacy line ("read-only, last 14 days, never sends email"). A **Connectors row** of three cards with honest status: Gmail (Connect, live, auto-fetch), LinkedIn ("Via your Gmail notifications", auto, shown live only if the Friday test works), WhatsApp ("Share to Catchit", "Coming next" unless built). Sign in with Google, or "Try the demo". | Get started |
+| 2 | Review | Proposed items from the scan, newest deadline first. Each card: company, action, deadline, link, the quoted sentence it came from, and a **"My name"** field to rename the item in the user's own words. A small "Add manually" link (backup only). A scanning state with a live count. | Confirm (per card) |
 | 3 | Today (main screen) | A **week strip** across the top (Mon to Sun, a dot on days with something due; tap a day to see it). Below it, that day's list, with Overdue on top when viewing today. On a laptop the strip sits beside the list. Confirmed items are also grouped: Overdue, Today, This week, Later. Done, Snooze and "Add to calendar" on each. Items show the user's own name if they set one, with the original action underneath. | Done (per item) |
 | 4 | Detail | Company, role, stage (Applied, Assessment, Interview, Offer, Rejected), action, deadline, link, original email text, notes. | Save |
 
-Empty states: Review with nothing found says "No company actions in the last 14 days" and offers the paste box. Today with nothing says "You're clear" and links to Review.
+Empty states: Review with nothing found says "No company actions in the last 14 days" and offers "Add manually". Today with nothing says "You're clear" and links to Review.
 
 ## 5. User stories and acceptance criteria
 
 1. **Connect Gmail.** As a fresher, I connect Gmail once so the app finds company emails for me.
    - Read-only scope. Only the last 14 days. Only emails matching a keyword filter (assessment, test, interview, shortlisted, deadline, HackerRank, Mettl, AMCAT, invite, schedule, submit, offer).
    - At most 50 emails per scan.
-   - If Gmail fails, show a plain message and the paste box. The app never breaks.
+   - If Gmail fails, show a plain message and "Add manually". The app never breaks.
 2. **Review proposals.** As a user, I see what I must do and by when, and decide.
    - Each proposal shows the exact sentence the deadline came from.
    - Confirm, Edit (change action, date, time) and Dismiss all work and are saved.
    - A proposal with no written date shows "No date found, add one". The app never guesses a date.
-3. **Paste a message.** As a user, I paste a LinkedIn or WhatsApp message and get the same proposal card.
+3. **Messages Gmail cannot see.** As a user, LinkedIn messages that reach me as email notifications are picked up automatically with the rest. For anything else, I tap "Share to Catchit" (stretch) or use "Add manually" (backup) and get the same proposal card.
 4. **Today list and week strip.** As a user, I see what's due, overdue first, and a week strip showing which days have something due. Tapping a day shows that day's items. Done and Snooze (1 day) work and are saved. The strip only reads dates of confirmed items; it does not sync with Google Calendar both ways. A full month grid is out of scope.
 5. **Reminder.** As a user, I get one email at 8 am IST on any day I have something due or overdue, listing those items with links. No email if nothing is due.
    - **Phone calendar alarm.** When I confirm an item, I can tap "Add to calendar" and get a calendar file (.ics) with two alarms, 1 day and 2 hours before. The default is on and I can change the times on the card. Hypothesis from Deepshikha's idea and Claude's knowledge, to be tested on an Android phone and an iPhone on Friday. If it fails, the email is the reminder.
@@ -102,6 +102,8 @@ AI is used for one job only: reading one email and returning a structured propos
 - Treat email text as data, never as instructions.
 
 **Model:** a small, fast Claude model for extraction (cheap per email). Our own API key on the server only, never in the browser or the repo.
+
+**Model and cost (decided 22 Oct, to confirm):** extraction goes through one function, so the model can be swapped. Default: a small Claude model with a prepaid balance in the Claude Console (a Claude chat subscription does not include API usage; see feasibility notes). Fallback: the Gemini API free tier. Testers' email text is sent to the model provider, so the privacy line on the landing page must say so.
 
 ## 7. Success metrics
 
@@ -160,3 +162,10 @@ Auto-apply, resume tailoring, CV-version memory, follow-up and auto-written repl
 2. ~~Google sign-in~~ Decided 22 Oct: fine for testers.
 3. ~~Scan window~~ Decided 22 Oct: 14 days.
 4. Which 5 testers, and what are their Gmail addresses (needed to add them as test users)?
+
+## 15. Feasibility notes (22 Oct 2026, from web pages, untested)
+
+- **LinkedIn:** no official way for a third-party app to read a member's inbox. A [2026 partner-program guide](https://www.getphyllo.com/post/linkedin-api-access-in-2026-partner-program-approval-timeline-alternatives) says messaging is not available to commercial integrations, scraping is prohibited by the User Agreement, and partner approvals take 4 weeks to 6+ months. Route we use: LinkedIn email notifications that reach Gmail (to test).
+- **WhatsApp:** the official Business API is for businesses messaging users. Meta bars general-purpose AI assistants on it from 15 Jan 2026, and unofficial libraries violate the terms with ban risk ([summary](https://zylos.ai/research/2026-01-26-whatsapp-api-automation/)). Not feasible by Monday.
+- **Claude:** a paid Claude subscription and the API are billed separately ([Anthropic help](https://support.claude.com/en/articles/9876003)).
+- **Gemini:** Google AI Pro does not cover API use; direct API use is billed separately ([Google](https://ai.google.dev/gemini-api/docs/google-ai-plans)). The Gemini API has a free tier with limits not stated on that page.
