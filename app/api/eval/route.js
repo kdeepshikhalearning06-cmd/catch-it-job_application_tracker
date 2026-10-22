@@ -7,9 +7,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Runs the private real-email cases (table eval_cases) through the model. Needs ?key=EVAL_KEY.
 export async function GET(request) {
-  const evalKey = process.env.EVAL_KEY;
+  const evalKey = process.env.EVAL_KEY?.trim();
   const url = new URL(request.url);
-  if (!evalKey || url.searchParams.get("key") !== evalKey) {
+  if (!evalKey || url.searchParams.get("key")?.trim() !== evalKey) {
     return Response.json({ ok: false, error: "Not allowed" }, { status: 401 });
   }
   const apiKey = process.env.GEMINI_API_KEY;

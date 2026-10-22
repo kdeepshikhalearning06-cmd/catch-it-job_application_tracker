@@ -18,6 +18,7 @@ export function GET() {
   // Shapes only, never values: lets us spot a stray space or a stale deployment.
   const demo = {
     emailLength: process.env.DEMO_EMAIL?.length ?? 0,
+    evalKeyLength: process.env.EVAL_KEY?.length ?? 0,
     passwordLength: process.env.DEMO_PASSWORD?.length ?? 0,
     hasStraySpace:
       process.env.DEMO_EMAIL !== process.env.DEMO_EMAIL?.trim() ||
