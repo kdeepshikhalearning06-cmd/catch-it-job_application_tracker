@@ -1,3 +1,6 @@
+import Link from "next/link";
+import DemoButton from "../components/DemoButton";
+
 export default function Home() {
   return (
     <main>
@@ -7,8 +10,11 @@ export default function Home() {
         Assessment links, interview invites and deadlines land in your email and
         get buried. Catchit finds them, and reminds you in time.
       </p>
-      <a className="btn" href="#how">See how it works</a>
-      <p className="note">Early build for the HelloPM Buildathon. Sign-in opens soon.</p>
+      <DemoButton />
+      <p className="note">
+        The demo uses sample emails, so you need no sign-in. Connecting your own Gmail arrives next.{" "}
+        <Link href="/login">Log in</Link> &middot; <a href="#how">See how it works</a>
+      </p>
 
       <div className="card" aria-label="Example of a caught action">
         <div className="tag">Caught from your email</div>

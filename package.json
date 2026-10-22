@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test test/extract.test.mjs"
+    "test": "node --test test/extract.test.mjs test/when.test.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "next": "15.5.28",
     "react": "19.1.1",
     "react-dom": "19.1.1"
