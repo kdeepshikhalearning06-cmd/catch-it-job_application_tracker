@@ -34,7 +34,7 @@ test("the notification uses the person's own name for the item", () => {
   const m = reminderMessage(item("a", 1.5, { my_name: "Infosys test", link: "https://x.example" }), "hours", now);
   assert.equal(m.title, "Due soon: Infosys test");
   assert.match(m.body, /due today, 11:30 am/);
-  assert.match(m.body, /Tap to open/);
+  assert.match(m.body, /Tap for the link\./);
   assert.equal(m.url, "/item/a");
 });
 
