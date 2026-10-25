@@ -89,10 +89,8 @@ export default function Home() {
               <div className="ph-card"><small>Sat, 11:59 pm</small>Skills assessment</div>
             </div>
             <div className="lp-push in">
-              <div className="float" style={{ "--t": "5s", "--fd": "-1s", display: "flex", gap: 10 }}>
-                <span className="ic"><Wordmark /></span>
-                <div><span className="t">now</span><b>Catchit · Due in 2 hours</b><p>Skills assessment, Sample Motors. Tap for the link.</p></div>
-              </div>
+              <span className="ic"><Wordmark /></span>
+              <div><span className="t">now</span><b>Catchit · Due in 2 hours</b><p>Skills assessment, Sample Motors. Tap for the link.</p></div>
             </div>
             <div className="lp-mail float" style={{ "--t": "5.5s", "--fd": "-2.5s" }}>
               <div className="f">From: careers@samplemotors.in</div>

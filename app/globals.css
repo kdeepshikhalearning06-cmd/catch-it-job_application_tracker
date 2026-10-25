@@ -340,7 +340,8 @@ a.act:hover { color: var(--accent-fg); }
 .lp-mail .caught { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 800; color: var(--accent-fg); }
 .lp-mail .caught i { width: 8px; height: 8px; border-radius: 50%; background: var(--urgent); animation: pulse 1.6s ease-out infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(227, 66, 34, 0.5); } 100% { box-shadow: 0 0 0 9px rgba(227, 66, 34, 0); } }
-.lp-push.in { animation: drop 0.8s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+/* The whole card floats, not just its text: drop in, then bob with the other cards. */
+.lp-push.in { animation: drop 0.8s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both, float 5s ease-in-out 1.7s infinite alternate; }
 @keyframes drop { from { opacity: 0; transform: translateY(-24px) scale(0.96); } }
 
 /* Sections */
