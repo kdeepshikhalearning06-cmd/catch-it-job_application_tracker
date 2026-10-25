@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           <section>
             <h2><i aria-hidden="true">📥</i>What we read</h2>
             <ul>
-              <li>Gmail, read-only, only emails from the last 14 days whose subject looks like it is from a recruiter or company (words like interview, assessment, deadline). Bank, card and bill emails are skipped before the AI sees them.</li>
+              <li>Gmail, read-only, only emails from the last 14 days whose subject or sender looks like a recruiter or company (words like interview, assessment, deadline, following up, or an hr@ or careers@ address). Bank, card and bill emails are skipped before the AI sees them.</li>
               <li>Your own sent emails, promotions and social updates are skipped.</li>
             </ul>
           </section>
