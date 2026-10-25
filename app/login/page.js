@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase.mjs";
 import { startDemo } from "../../lib/demo.mjs";
+import Logo from "../../components/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,32 +51,47 @@ export default function LoginPage() {
   };
 
   return (
-    <main>
-      <Link href="/" className="brand">Catchit</Link>
-      <h1>Get started</h1>
-      <p className="lead">Connect the Gmail you use for job applications. Catchit reads it (read-only) and shows you every test, interview and deadline it finds.</p>
-      <p>
-        <a className="btn" href="/api/gmail/start">Connect my Gmail</a>
-      </p>
-      <div className="callout">
-        <b>Heads up:</b> Catchit is a student project, so Google shows a &ldquo;Google hasn&rsquo;t verified this app&rdquo; screen.
-        Tap <b>Continue</b>, or <b>Advanced</b> then <b>Go to Catchit</b>. Catchit never sends, changes or deletes an email. <a href="/privacy">Privacy</a>
-      </div>
-      {gmailProblem ? <p className="note error-text">{gmailProblem}</p> : null}
-      <p className="note">Just looking? <button className="linkbtn" onClick={demo} disabled={busy}>Try the demo with sample emails</button></p>
-      <details className="pw">
-        <summary>Have a Catchit password? (demo and judges)</summary>
-        <form onSubmit={signIn} className="form">
-          <label className="field">Email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-          </label>
-          <label className="field">Password
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
-          </label>
-          <button className="b" disabled={busy} type="submit">Log in</button>
-        </form>
-      </details>
-      {message ? <p className="note error-text">{message}</p> : null}
-    </main>
+    <div className="page">
+      <header className="page-head">
+        <Logo />
+        <Link href="/" className="back">← Home</Link>
+      </header>
+      <main className="page-body">
+        <div className="panel">
+          <span className="eyebrow">Get started</span>
+          <h1>Connect the Gmail you apply from</h1>
+          <p className="lead">Catchit reads your job emails and shows every test, interview and deadline it finds. It takes about a minute.</p>
+          <a className="btn full" href="/api/gmail/start">Connect my Gmail</a>
+          {gmailProblem ? <p className="note error-text">{gmailProblem}</p> : null}
+          <ul className="trust">
+            <li>Read-only, and only the last 14 days of email</li>
+            <li>Never sends, changes or deletes anything</li>
+            <li>Disconnect or delete your data any time</li>
+          </ul>
+          <div className="callout">
+            <span className="ic" aria-hidden="true">💡</span>
+            <span>
+              Catchit is a student project, so Google shows a &ldquo;Google hasn&rsquo;t verified this app&rdquo; screen.
+              Tap <b>Continue</b>, or <b>Advanced</b> then <b>Go to Catchit</b>. <a href="/privacy">How we use your data</a>
+            </span>
+          </div>
+          <div className="or">or</div>
+          <button className="btn alt full" onClick={demo} disabled={busy}>{busy ? "Opening the demo…" : "Try the demo with sample emails"}</button>
+          <details className="pw">
+            <summary>Have a Catchit password? (demo and judges)</summary>
+            <form onSubmit={signIn} className="form">
+              <label className="field">Email
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+              </label>
+              <label className="field">Password
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
+              </label>
+              <button className="b p" disabled={busy} type="submit">Log in</button>
+            </form>
+          </details>
+          {message ? <p className="note error-text">{message}</p> : null}
+        </div>
+      </main>
+    </div>
   );
 }

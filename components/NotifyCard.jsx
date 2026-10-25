@@ -71,27 +71,30 @@ export default function NotifyCard({ full = false }) {
   }
 
   return (
-    <div className="notify">
-      <strong>{state === "on" ? "🔔 Reminders are on for this device" : "Get a nudge before it's due"}</strong>
-      {state === "off" || state === "on" ? (
-        <p>A notification a day before and 2 hours before each deadline, and when Catchit finds something new in your email.{state === "off" ? " Your browser will ask for permission: tap Allow." : ""}</p>
-      ) : null}
-      {state === "ios-install" ? (
-        <ol className="steps">
-          <li>Tap the <b>Share</b> button in Safari.</li>
-          <li>Choose <b>Add to Home Screen</b>.</li>
-          <li>Open Catchit from your Home Screen and turn on reminders there.</li>
-        </ol>
-      ) : null}
-      {state === "unsupported" ? <p>This browser can't show reminders. Open Catchit in Chrome, or add your deadlines to Google Calendar from each card.</p> : null}
-      {state === "blocked" ? <p>Notifications are blocked for Catchit. Tap the icon to the left of the web address, open Permissions (or Site settings), set Notifications to Allow, then reload this page.</p> : null}
-      <div className="btns">
-        {state === "off" ? <button className="b p" onClick={enable} disabled={busy}>{busy ? "Turning on…" : "Turn on reminders"}</button> : null}
-        {state === "on" ? <button className="b" onClick={test} disabled={busy}>{busy ? "Sending…" : "Send a test"}</button> : null}
-        {state === "on" && full ? <button className="b" onClick={disable} disabled={busy}>Turn off on this device</button> : null}
-        {installPrompt && !isInstalled() ? <button className="b" onClick={install}>Add to Home Screen</button> : null}
+    <div className={`notify ${state === "blocked" ? "blocked" : ""}`}>
+      <span className="bell" aria-hidden="true">{state === "blocked" ? "🔕" : "🔔"}</span>
+      <div className="body">
+        <strong>{state === "on" ? "Reminders are on for this device" : state === "blocked" ? "Notifications are blocked" : "Get a nudge before it's due"}</strong>
+        {state === "off" || state === "on" ? (
+          <p>A notification a day before and 2 hours before each deadline, and when Catchit finds something new in your email.{state === "off" ? " Your browser will ask for permission: tap Allow." : ""}</p>
+        ) : null}
+        {state === "ios-install" ? (
+          <ol className="steps">
+            <li>Tap the <b>Share</b> button in Safari.</li>
+            <li>Choose <b>Add to Home Screen</b>.</li>
+            <li>Open Catchit from your Home Screen and turn on reminders there.</li>
+          </ol>
+        ) : null}
+        {state === "unsupported" ? <p>This browser can&rsquo;t show reminders. Open Catchit in Chrome, or add your deadlines to Google Calendar from each card.</p> : null}
+        {state === "blocked" ? <p>Tap the icon to the left of the web address, open Permissions (or Site settings), set Notifications to Allow, then reload this page.</p> : null}
+        <div className="btns">
+          {state === "off" ? <button className="b p" onClick={enable} disabled={busy}>{busy ? "Turning on…" : "Turn on reminders"}</button> : null}
+          {state === "on" ? <button className="b" onClick={test} disabled={busy}>{busy ? "Sending…" : "Send a test"}</button> : null}
+          {state === "on" && full ? <button className="b" onClick={disable} disabled={busy}>Turn off on this device</button> : null}
+          {installPrompt && !isInstalled() ? <button className="b" onClick={install}>Add to Home Screen</button> : null}
+        </div>
+        {note ? <div className="notify-note">{note}</div> : null}
       </div>
-      {note ? <div className="notify-note">{note}</div> : null}
     </div>
   );
 }

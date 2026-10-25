@@ -37,22 +37,21 @@ export default function ReviewPage() {
 
   return (
     <AppShell reviewCount={proposed.length} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
-      <h1 className="page-title">Review</h1>
-      <p className="sub">Catchit found these in your emails. Confirm what is right, fix what is not.</p>
-      {!isDemo ? (
-        <div className="btns" style={{ margin: "0 0 12px" }}>
-          <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button>
-        </div>
-      ) : null}
+      <div className="titlerow">
+        <h1 className="page-title">Review</h1>
+        {!isDemo ? <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button> : null}
+      </div>
+      <p className="sub">Catchit found these in your emails. Confirm what&rsquo;s right, fix what isn&rsquo;t.</p>
       {later && !scan.text ? (
         <p className="scan-note">Catchit is still reading some of your emails in the background. Anything new shows up here within 15 minutes, and you&rsquo;ll get a notification if reminders are on.</p>
       ) : null}
-      {scan.text ? <p className="sub">{scan.text}</p> : null}
+      {scan.text ? <p className="scan-note">{scan.text}</p> : null}
       {loading ? <p className="sub">Loading…</p> : null}
       {!loading && proposed.length === 0 ? (
         <div className="empty">
-          <strong>Nothing to review.</strong>
-          <p>Everything Catchit found has been dealt with. <Link href="/today">See Today</Link></p>
+          <span className="ic" aria-hidden="true">✅</span>
+          <strong>All caught up.</strong>
+          <p>Everything Catchit found has been checked. <Link href="/today">See Today</Link></p>
         </div>
       ) : null}
       {proposed.map((item) => (
