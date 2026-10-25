@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { dayKey, weekOf, formatDeadline, relative, toLocalInput, fromLocalInput, groupForDay, dayMarks, tomorrowStart, isHidden } from "../lib/when.mjs";
+import { dayKey, weekOf, formatDeadline, relative, toLocalInput, fromLocalInput, groupForDay, dayMarks, tomorrowStart, isHidden, summary, countdown, dayWord } from "../lib/when.mjs";
 import { demoItems } from "../lib/seed.mjs";
 
 // Thursday 22 Oct 2026, 11:00 am IST
@@ -77,4 +77,31 @@ test("the demo inbox has a mix for Review and Today", () => {
   assert.equal(items.filter((i) => i.status === "proposed").length, 4);
   assert.equal(items.filter((i) => i.status === "confirmed").length, 5);
   assert.ok(items.every((i) => i.source === "demo" && i.evidence));
+});
+
+test("summary counts overdue, today, this week and finds the next item", () => {
+  const now = new Date("2026-10-25T13:00:00Z"); // 6:30 pm IST, Sun
+  const items = [
+    { status: "confirmed", deadline: "2026-10-24T12:30:00Z" }, // yesterday, overdue
+    { status: "confirmed", deadline: "2026-10-25T15:00:00Z" }, // today 8:30 pm
+    { status: "confirmed", deadline: "2026-10-26T04:30:00Z" }, // tomorrow 10 am
+    { status: "confirmed", deadline: "2026-11-10T04:30:00Z" }, // later
+    { status: "proposed", deadline: "2026-10-26T04:30:00Z" },
+  ];
+  const s = summary(items, now);
+  assert.equal(s.overdue, 1);
+  assert.equal(s.today, 1);
+  assert.equal(s.week, 2);
+  assert.equal(s.toCheck, 1);
+  assert.equal(s.next.deadline, "2026-10-25T15:00:00Z");
+  assert.equal(s.comingUp.length, 1);
+});
+
+test("countdown and dayWord read naturally", () => {
+  const now = new Date("2026-10-25T13:00:00Z");
+  assert.equal(countdown("2026-10-26T04:20:00Z", now), "15 h 20 m");
+  assert.equal(countdown("2026-10-25T13:35:00Z", now), "35 m");
+  assert.equal(countdown("2026-10-28T17:00:00Z", now), "3 d 4 h");
+  assert.equal(dayWord("2026-10-24T12:30:00Z", now), "Yesterday");
+  assert.equal(dayWord("2026-10-26T04:30:00Z", now), "Tomorrow");
 });
