@@ -196,3 +196,22 @@ Survey (21 responses): 16 of 21 check company messages on their phone at least a
 - **Morning email:** moved below the line. It lands in the same inbox where things get missed, Resend's free plan cannot send to testers without a verified domain, and the free cron cannot time it.
 - **Privacy page, Disconnect Gmail, Delete my account** are built (Account page).
 - Demo: scheduled reminders skip demo items; judges use "Send a test" on Today.
+
+## 19. Changes after testing (25 Oct 2026)
+
+Five testers (Anushka, Sulakshay, Prakhar, Prabhanshu, Tulasi). The full log is kept outside the repo.
+
+| What testers hit | Change | Where |
+|---|---|---|
+| First Gmail connect failed once for every new user | User is created before the sign-in link | PR #5 |
+| Login opened with a password form nobody had | Connect my Gmail is first; the password is for the demo only | PR #5 |
+| No guidance on first open | Short first-time guide on Review and Today | PR #5 |
+| App looked plain and unprofessional (3 of 5) | Full redesign, dark mode, catchit wordmark, "Please check this one" flag | PR #6, #7 |
+| An item due in two days was not on Today | Today shows next up, overdue, due today and coming up | PR #7 |
+| Job-board ads became "Apply for the position" cards | Alert senders skipped, prompt rule, no-date "apply" dropped in code | PR #8 |
+| Emails asking for a fee | Shown as "Looks like a scam: do not pay the fee" | PR #5 |
+
+Screens are now 5: Review, Today, Detail, Add a task, Account (section 4 listed 4).
+
+Still open: two missed emails (waiting for the testers to share them), the Chrome "Possible spam" label on one notification, and the calendar description not prefilling on one phone.
+
