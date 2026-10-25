@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -60,4 +60,16 @@ test("extractEmail passes the email through the model call", async () => {
 test("every sample has expected deadlines and unique ids", () => {
   assert.equal(samples.length, 10);
   assert.equal(new Set(samples.map((s) => s.id)).size, 10);
+});
+
+test("evidence made of two separate sentences from the email passes", () => {
+  const email = { body: "Your exam is on Friday, 23 October 2026.\n\nRead the guide.\n• Entry begins at 7:30 AM." };
+  const text = JSON.stringify({ proposals: [{ action: "Attend the exam", deadline: "2026-10-23T07:30:00+05:30", link: null, evidence: "Your exam is on Friday, 23 October 2026. Entry begins at 7:30 AM.", confidence: "high" }] });
+  const { proposals, problems } = checkProposals(email, text);
+  assert.equal(problems.length, 0);
+  assert.equal(proposals.length, 1);
+});
+
+test("received time is sent to the model in IST", () => {
+  assert.equal(toIst("2026-10-21T10:00:00+00:00"), "2026-10-21T15:30:00+05:30");
 });
