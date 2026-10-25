@@ -19,7 +19,7 @@ export default function AppShell({ reviewCount, isDemo, onReset, onSignOut, erro
           {tab("/review", "Review", reviewCount)}
           {tab("/today", "Today")}
         </nav>
-        <button className="linkbtn" onClick={onSignOut}>Sign out</button>
+        <Link href="/account" className={`tab ${path === "/account" ? "on" : ""}`}>Account</Link>
       </header>
       {isDemo ? (
         <div className="banner">

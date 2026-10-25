@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import AppShell from "../../components/AppShell";
+import NotifyCard from "../../components/NotifyCard";
+import { googleCalendarUrl } from "../../lib/calendar.mjs";
 import { useItems } from "../../lib/useItems";
 import { dayKey, weekOf, dayMarks, groupForDay, formatDeadline, relative, tomorrowStart } from "../../lib/when.mjs";
 
@@ -21,6 +23,7 @@ function TodayCard({ item, now, late, onChange }) {
         <button className="b p" onClick={() => onChange(item.id, { status: "done" })}>Done</button>
         <button className="b" onClick={() => onChange(item.id, { snoozed_until: tomorrowStart(now) })}>Snooze</button>
         {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
+        {item.deadline && !late ? <a className="b" href={googleCalendarUrl(item)} target="_blank" rel="noreferrer">Add to calendar</a> : null}
       </div>
     </div>
   );
@@ -45,6 +48,7 @@ export default function TodayPage() {
         <h1 className="page-title">{selected === today ? "Today" : `${selectedDay?.label} ${selectedDay?.num}`}</h1>
         <Link className="b" href="/add">+ Add</Link>
       </div>
+      <NotifyCard />
       <div className="strip" role="tablist" aria-label="This week">
         {days.map((d) => {
           const m = marks[d.key];

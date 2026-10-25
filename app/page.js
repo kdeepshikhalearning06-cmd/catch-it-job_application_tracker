@@ -81,7 +81,7 @@ export default function Home() {
           <article className="bx b-red">
             <span className="n">3</span>
             <h3>Get nudged in time</h3>
-            <p>One list for today. A phone alarm. One email the morning it&rsquo;s due.</p>
+            <p>A notification on your phone a day before and 2 hours before. One tap to add it to your calendar.</p>
           </article>
         </div>
       </section>
@@ -91,7 +91,7 @@ export default function Home() {
         <DemoButton />
       </section>
 
-      <footer className="lp-foot">Read-only Gmail &middot; Built for the HelloPM Buildathon 2026</footer>
+      <footer className="lp-foot">Read-only Gmail &middot; <Link href="/privacy">Privacy</Link> &middot; Built for the HelloPM Buildathon 2026</footer>
     </div>
   );
 }

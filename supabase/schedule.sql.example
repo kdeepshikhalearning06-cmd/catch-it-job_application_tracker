@@ -1,0 +1,21 @@
+-- Runs the background job every 15 minutes (Vercel's free plan only allows once a day).
+-- Run this once in the Supabase SQL editor after replacing YOUR_CRON_SECRET with the CRON_SECRET set in Vercel.
+-- Do not commit the real secret.
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+
+select vault.create_secret('YOUR_CRON_SECRET', 'catchit_cron_secret');
+
+select cron.schedule(
+  'catchit-notify',
+  '*/15 * * * *',
+  $$
+  select net.http_get(
+    url := 'https://catch-it-jobapplicationtracker.vercel.app/api/cron/notify',
+    headers := jsonb_build_object(
+      'authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'catchit_cron_secret')
+    ),
+    timeout_milliseconds := 60000
+  );
+  $$
+);

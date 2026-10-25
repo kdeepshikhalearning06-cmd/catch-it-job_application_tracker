@@ -187,3 +187,12 @@ What changed from the spec above, so this file matches the product:
 - **Model:** Gemini by default; Claude is used for real inbox mail when `ANTHROPIC_API_KEY` is set.
 - **Design:** bold, student-first style in the agreed palette (cream, green, orange-red), phone-first.
 - **Not built yet:** morning reminder email, calendar alarm file, test reminder, privacy page with Disconnect and Delete, laptop two-column layout.
+
+## 18. Change, 25 Oct 2026: push reminders replace the morning email
+
+Survey (21 responses): 16 of 21 check company messages on their phone at least as much as a laptop, so reminders must reach the phone. Decided with Deepshikha:
+- **Web push** (installable web app, like yapping.me): "Catchit found N new" after a background Gmail scan, and "Tomorrow:" / "Due soon:" about 24 hours and 2 hours before each confirmed deadline. Nothing else is pushed. Background job every 15 minutes via Supabase pg_cron, plus a daily Vercel cron as a backup.
+- **Google Calendar:** an "Add to calendar" link that opens a prefilled event. Calendar API access was rejected: a second consent screen for little gain.
+- **Morning email:** moved below the line. It lands in the same inbox where things get missed, Resend's free plan cannot send to testers without a verified domain, and the free cron cannot time it.
+- **Privacy page, Disconnect Gmail, Delete my account** are built (Account page).
+- Demo: scheduled reminders skip demo items; judges use "Send a test" on Today.
