@@ -15,7 +15,7 @@ export default function Home() {
     <div className="lp">
       <header className="lp-nav">
         <span className="lp-logo">Catchit<b aria-hidden="true">✳︎</b></span>
-        <Link href="/login" className="lp-login">Log in</Link>
+        <Link href="/login" className="lp-login">Sign in</Link>
       </header>
 
       <section className="lp-hero">
@@ -27,14 +27,14 @@ export default function Home() {
             <span className="line"><span>again.</span></span>
           </h1>
           <p className="lp-lede pop" style={{ "--d": "500ms" }}>
-            Recruiters bury deadlines in long emails. Catchit digs out every test, interview and
-            deadline, and puts it on one list with an alarm on your phone.
+            Catchit reads your job emails and finds every test, interview and deadline. You get one
+            list, and a phone alert before each one is due.
           </p>
           <div className="lp-cta pop" style={{ "--d": "650ms" }}>
-            <DemoButton />
-            <a className="lp-ghost" href="#how">How it works ↓</a>
+            <Link className="btn" href="/login">Connect my Gmail</Link>
+            <DemoButton className="btn alt" />
           </div>
-          <p className="lp-note pop" style={{ "--d": "750ms" }}>No sign-up for the demo. Sample emails only.</p>
+          <p className="lp-note pop" style={{ "--d": "750ms" }}>Free and read-only. The demo uses sample emails, no sign-up. <a href="#how">How it works ↓</a></p>
         </div>
 
         <div className="lp-phonewrap pop" style={{ "--d": "300ms" }}>
@@ -88,7 +88,10 @@ export default function Home() {
 
       <section className="lp-final">
         <h2>Your inbox has a deadline in it right now.</h2>
-        <DemoButton />
+        <div className="lp-cta">
+          <Link className="btn" href="/login">Connect my Gmail</Link>
+          <DemoButton className="btn alt" />
+        </div>
       </section>
 
       <footer className="lp-foot">Read-only Gmail &middot; <Link href="/privacy">Privacy</Link> &middot; Built for the HelloPM Buildathon 2026</footer>

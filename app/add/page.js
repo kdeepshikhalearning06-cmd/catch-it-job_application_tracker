@@ -44,7 +44,7 @@ export default function AddPage() {
   return (
     <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={items.some((i) => i.source === "demo")} onReset={reset} onSignOut={signOut} error={error}>
       <h1 className="page-title">Add one yourself</h1>
-      <p className="sub">For things that did not come by email, like a call or a WhatsApp message.</p>
+      <p className="sub">Got a task on a call or on WhatsApp? Add it here.</p>
       <form className="card" onSubmit={save}>
         <label className="field">What you need to do
           <input value={action} onChange={(e) => setAction(e.target.value)} placeholder="For example: Send the case study" />

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import FirstRunGuide from "./FirstRunGuide";
 
 export default function AppShell({ reviewCount, isDemo, onReset, onSignOut, error, children }) {
   const path = usePathname();
@@ -28,7 +29,10 @@ export default function AppShell({ reviewCount, isDemo, onReset, onSignOut, erro
         </div>
       ) : null}
       {error ? <div className="banner error">Something went wrong: {error}</div> : null}
-      <main className="content">{children}</main>
+      <main className="content">
+        {path === "/review" || path === "/today" ? <FirstRunGuide isDemo={isDemo} /> : null}
+        {children}
+      </main>
     </div>
   );
 }

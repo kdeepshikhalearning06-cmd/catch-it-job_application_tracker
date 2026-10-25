@@ -49,7 +49,7 @@ export default function ReviewCard({ item, now, onChange }) {
         <div className="meta"><span className="flag">No date found</span> Add one if you know it.</div>
       )}
       {item.evidence ? <blockquote className="quote">From your email: &ldquo;{item.evidence}&rdquo;</blockquote> : null}
-      {item.confidence && item.confidence !== "high" ? <div className="meta">Catchit is not sure about this one. Please check it.</div> : null}
+      {item.confidence && item.confidence !== "high" ? <div className="meta unsure"><span className="flag warn">Please check</span> Catchit is not sure about this one.</div> : null}
       <div className="btns">
         <button className="b p" onClick={() => onChange(item.id, { status: "confirmed" })}>Confirm</button>
         <button className="b" onClick={() => setEditing(true)}>Edit</button>

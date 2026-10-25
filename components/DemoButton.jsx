@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { startDemo } from "../lib/demo.mjs";
 
-export default function DemoButton() {
+export default function DemoButton({ className = "btn" }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -23,7 +23,7 @@ export default function DemoButton() {
 
   return (
     <>
-      <button className="btn" onClick={go} disabled={busy}>{busy ? "Opening the demo…" : "Try the demo"}</button>
+      <button className={className} onClick={go} disabled={busy}>{busy ? "Opening the demo…" : "Try the demo"}</button>
       {message ? <p className="note error-text">{message}</p> : null}
     </>
   );

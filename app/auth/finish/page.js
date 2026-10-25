@@ -29,9 +29,11 @@ export default function Finish() {
             throw new Error("This sign-in link was already used or has expired.");
           }
         }
-        setMessage("Reading the last 14 days of your email. This can take up to a minute…");
-        await scanGmail({ force: true });
-        router.replace("/review");
+        setMessage("Reading your job emails from the last 14 days. This takes up to a minute, so keep this screen open…");
+        // If the first pass doesn't finish (slow phone network, busy AI model), the background check
+        // reads the rest within 15 minutes, so the person goes to Review either way.
+        const r = await scanGmail({ force: true }).catch(() => null);
+        router.replace(!r || r.left ? "/review?scan=later" : "/review");
       } catch (err) {
         setFailed(true);
         setMessage(err.message || "Something went wrong.");

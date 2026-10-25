@@ -27,6 +27,11 @@ export async function GET(request) {
     if (!email || !tokens.refresh_token) return back(origin, "token");
 
     const admin = adminClient();
+    // Create the account first. A magic link made for a brand-new email is a sign-up link,
+    // which the magiclink check below rejects, so every first connect used to fail once.
+    const { error: createError } = await admin.auth.admin.createUser({ email, email_confirm: true });
+    if (createError && createError.code !== "email_exists" && createError.status !== 422) throw createError;
+
     const { data: link, error: linkError } = await admin.auth.admin.generateLink({ type: "magiclink", email });
     if (linkError) throw linkError;
     const userId = link.user.id;
