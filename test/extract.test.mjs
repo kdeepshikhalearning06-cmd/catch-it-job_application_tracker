@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -72,4 +72,10 @@ test("evidence made of two separate sentences from the email passes", () => {
 
 test("received time is sent to the model in IST", () => {
   assert.equal(toIst("2026-10-21T10:00:00+00:00"), "2026-10-21T15:30:00+05:30");
+});
+
+test("pickModel uses OpenRouter when only its key is set, and Claude first when both are", () => {
+  assert.equal(pickModel({ OPENROUTER_API_KEY: "x", GEMINI_API_KEY: "g" }).model, "google/gemini-3.5-flash-lite");
+  assert.equal(pickModel({ OPENROUTER_API_KEY: "x", ANTHROPIC_API_KEY: "a" }).model, "claude-haiku-5-5");
+  assert.equal(pickModel({ GEMINI_API_KEY: "g" }).model, "gemini-3.5-flash-lite");
 });

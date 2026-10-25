@@ -1,9 +1,7 @@
-import { callGemini, extractEmail, scoreEmail } from "../../../lib/extract.mjs";
+import { pickModel, extractEmail, scoreEmail } from "../../../lib/extract.mjs";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Runs the private real-email cases (table eval_cases) through the model. Needs ?key=EVAL_KEY.
 export async function GET(request) {
@@ -12,8 +10,7 @@ export async function GET(request) {
   if (!evalKey || url.searchParams.get("key")?.trim() !== evalKey) {
     return Response.json({ ok: false, error: "Not allowed" }, { status: 401 });
   }
-  const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+  const { model, call } = pickModel();
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/eval_cases?select=*&order=id`,
@@ -21,16 +18,6 @@ export async function GET(request) {
   );
   if (!res.ok) return Response.json({ ok: false, error: "Could not read cases" }, { status: 500 });
   const cases = await res.json();
-
-  const call = async (system, user) => {
-    try {
-      return await callGemini(system, user, { apiKey, model });
-    } catch (err) {
-      if (err.status !== 429) throw err;
-      await wait(5000);
-      return callGemini(system, user, { apiKey, model });
-    }
-  };
 
   const now = new Date();
   const results = await Promise.all(
