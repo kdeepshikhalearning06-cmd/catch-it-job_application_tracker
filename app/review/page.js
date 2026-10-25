@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import ReviewCard from "../../components/ReviewCard";
@@ -11,6 +11,11 @@ export default function ReviewPage() {
   const { loading, items, error, update, reset, signOut, reload } = useItems();
   const [scan, setScan] = useState({ busy: false, text: "" });
   const [now] = useState(() => new Date());
+  const [later, setLater] = useState(false);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("scan") === "later") setLater(true);
+  }, []);
   const proposed = items.filter((i) => i.status === "proposed");
   const isDemo = items.some((i) => i.source === "demo");
 
@@ -19,7 +24,7 @@ export default function ReviewPage() {
     try {
       const r = await scanGmail();
       await reload();
-      const more = r.left ? ` ${r.left} more are waiting, scan again to read them.` : "";
+      const more = r.left ? ` ${r.left} more are still being read in the background. New ones will show up here within 15 minutes.` : "";
       setScan({ busy: false, text: r.found ? `Found ${r.found} new from ${r.email}.${more}` : `Nothing new in ${r.email}.${more}` });
     } catch (err) {
       if (err.notConnected) {
@@ -38,6 +43,9 @@ export default function ReviewPage() {
         <div className="btns" style={{ margin: "0 0 12px" }}>
           <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button>
         </div>
+      ) : null}
+      {later && !scan.text ? (
+        <p className="scan-note">Catchit is still reading some of your emails in the background. Anything new shows up here within 15 minutes, and you&rsquo;ll get a notification if reminders are on.</p>
       ) : null}
       {scan.text ? <p className="sub">{scan.text}</p> : null}
       {loading ? <p className="sub">Loading…</p> : null}

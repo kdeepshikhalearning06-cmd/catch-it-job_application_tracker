@@ -42,7 +42,7 @@ export default function NotifyCard({ full = false }) {
     await turnOn();
     setState("on");
     await sendTest();
-    setNote("Done. A test reminder is on its way.");
+    setNote("Done. A test reminder is on its way. If Chrome marks it as possible spam, open it and choose to allow Catchit. It's new, so Chrome doesn't know it yet.");
   });
   const test = run(async () => {
     await sendTest();
@@ -74,7 +74,7 @@ export default function NotifyCard({ full = false }) {
     <div className="notify">
       <strong>{state === "on" ? "🔔 Reminders are on for this device" : "Get a nudge before it's due"}</strong>
       {state === "off" || state === "on" ? (
-        <p>A notification a day before and 2 hours before each deadline, and when Catchit finds something new in your email.</p>
+        <p>A notification a day before and 2 hours before each deadline, and when Catchit finds something new in your email.{state === "off" ? " Your browser will ask for permission: tap Allow." : ""}</p>
       ) : null}
       {state === "ios-install" ? (
         <ol className="steps">
@@ -84,7 +84,7 @@ export default function NotifyCard({ full = false }) {
         </ol>
       ) : null}
       {state === "unsupported" ? <p>This browser can't show reminders. Open Catchit in Chrome, or add your deadlines to Google Calendar from each card.</p> : null}
-      {state === "blocked" ? <p>Notifications are blocked for Catchit. Allow them in your browser's site settings for this page, then reload.</p> : null}
+      {state === "blocked" ? <p>Notifications are blocked for Catchit. Tap the icon to the left of the web address, open Permissions (or Site settings), set Notifications to Allow, then reload this page.</p> : null}
       <div className="btns">
         {state === "off" ? <button className="b p" onClick={enable} disabled={busy}>{busy ? "Turning on…" : "Turn on reminders"}</button> : null}
         {state === "on" ? <button className="b" onClick={test} disabled={busy}>{busy ? "Sending…" : "Send a test"}</button> : null}
