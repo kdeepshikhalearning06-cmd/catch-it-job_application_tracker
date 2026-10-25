@@ -38,6 +38,11 @@ test("the notification uses the person's own name for the item", () => {
   assert.equal(m.url, "/item/a");
 });
 
+test("the day-before reminder says Today or Tomorrow by India date", () => {
+  assert.equal(reminderMessage(item("a", 8), "day", now).title, "Today: Complete the assessment");
+  assert.equal(reminderMessage(item("b", 20), "day", now).title, "Tomorrow: Complete the assessment");
+});
+
 test("found message counts new actions", () => {
   assert.equal(foundMessage([item("a", 3)]).title, "Catchit found 1 new action");
   const m = foundMessage([item("a", 3), item("b", 4)]);
