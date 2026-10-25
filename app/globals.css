@@ -144,6 +144,36 @@ li { margin: 8px 0; }
 .pw summary { cursor: pointer; color: var(--muted); font-size: 0.88rem; font-weight: 600; }
 .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--accent-soft); border-top-color: var(--accent); animation: spin 0.9s linear infinite; margin-bottom: 18px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+/* Sign-in finish: progress steps beside examples of what Catchit looks for */
+.finish { flex: 1; width: 100%; max-width: 980px; margin: 0 auto; padding: 16px 16px 56px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 28px; align-items: start; }
+.finish-main h1 { margin-bottom: 6px; }
+.finish-main .lead { margin-bottom: 18px; }
+.fbar { height: 8px; border-radius: 999px; background: var(--accent-soft); overflow: hidden; margin: 0 0 22px; }
+.fbar i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 1s ease; }
+.fsteps { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.fsteps li { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; margin: 0; }
+.fsteps .dot { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 800; border: 2px solid var(--line-strong); color: var(--soft); background: var(--surface); }
+.fsteps b { display: block; font-size: 0.98rem; }
+.fsteps small { display: block; color: var(--muted); font-size: 0.84rem; margin-top: 2px; }
+.fsteps li.next b { color: var(--soft); }
+.fsteps li.done .dot { background: var(--accent); border-color: var(--accent); color: #fff; }
+.fsteps li.now .dot { border-color: var(--accent); color: var(--accent-fg); animation: ring 1.4s ease-out infinite; }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(4, 106, 56, 0.35); } 100% { box-shadow: 0 0 0 10px rgba(4, 106, 56, 0); } }
+.fsafe { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--muted); }
+.finish-side { display: grid; gap: 14px; padding-top: 8px; }
+.fside-h { margin: 0; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--soft); }
+.fside-n { margin: 4px 0 0; font-size: 0.84rem; color: var(--muted); }
+.fcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: var(--shadow); display: grid; gap: 4px; }
+.fcard b { font-size: 0.98rem; }
+.fcard small { color: var(--muted); font-size: 0.84rem; }
+.fk { justify-self: start; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 999px; padding: 3px 9px; }
+.fk-a { background: var(--accent-soft); color: var(--accent-fg); }
+.fk-b { background: var(--warn-soft); color: var(--warn-ink); }
+.fk-c { background: var(--urgent-soft); color: var(--urgent-ink); }
+@media (max-width: 760px) {
+  .finish { grid-template-columns: 1fr; gap: 20px; }
+  .finish-side { padding-top: 0; }
+}
 .foot { text-align: center; font-size: 0.8rem; color: var(--soft); padding: 24px 16px 32px; }
 .foot a { color: var(--muted); }
 
