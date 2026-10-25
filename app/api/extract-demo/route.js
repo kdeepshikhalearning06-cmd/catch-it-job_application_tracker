@@ -7,8 +7,12 @@ export const maxDuration = 60;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Runs the sample emails through the model and scores them. Sample emails only, never user input.
-// /api/extract-demo?id=3 runs one email; without id it runs all ten.
+// /api/extract-demo?key=EVAL_KEY&id=3 runs one email; without id it runs all ten.
 export async function GET(request) {
+  const evalKey = process.env.EVAL_KEY?.trim();
+  if (!evalKey || new URL(request.url).searchParams.get("key")?.trim() !== evalKey) {
+    return Response.json({ ok: false, error: "Not allowed" }, { status: 401 });
+  }
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return Response.json({ ok: false, error: "GEMINI_API_KEY is not set" }, { status: 500 });
   const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
