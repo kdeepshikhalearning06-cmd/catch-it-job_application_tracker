@@ -180,7 +180,7 @@ Auto-apply, resume tailoring, CV-version memory, follow-up and auto-written repl
 What changed from the spec above, so this file matches the product:
 
 - **No paste box.** Gmail connect replaced it. Manual entry exists only as "Add manually" on Today, for things that did not come by email.
-- **Gmail:** read-only, last 14 days, up to 40 emails per scan, searches recruiter-style words (including exam, admit card, scheduled), skips sent mail, never reads the same email twice. Users sign in with Google; the account is made from the verified Google email. The app is in Google's testing mode, so only invited testers can connect.
+- **Gmail:** read-only, last 14 days, up to 40 emails per scan, searches recruiter-style words in the subject line (including exam, admit card, scheduled, offer, intern, "following up") or recruiter-style senders (hr@, careers@, talent, campus), never the body, skips finance mail (statements, OTPs, EMIs, bills) before the AI sees it, skips sent mail, never reads the same email twice. Users sign in with Google; the account is made from the verified Google email. The app is in Google's testing mode, so only invited testers can connect.
 - **Demo:** shared demo account with sample emails and a Reset demo button, as specified.
 - **Detail screen:** stage (applied, assessment, interview, offer, rejected) and notes. "My name" for an item is set in Review's Edit.
 - **Extraction rules learned from real mail:** an event on a date (exam, interview) is an attend action whose deadline is its start or entry time; background notes and later rounds with no date are not actions; evidence may be two sentences; the model reads up to 6,000 characters.
@@ -210,6 +210,7 @@ Five testers (Anushka, Sulakshay, Prakhar, Prabhanshu, Tulasi). The full log is 
 | An item due in two days was not on Today | Today shows next up, overdue, due today and coming up | PR #7 |
 | Job-board ads became "Apply for the position" cards | Alert senders skipped, prompt rule, no-date "apply" dropped in code | PR #8 |
 | Emails asking for a fee | Shown as "Looks like a scam: do not pay the fee" | PR #5 |
+| Privacy: bank and card emails saying "due" could reach the AI | Search matches the subject only; finance emails skipped before the AI | PR #11 |
 
 Screens are now 5: Review, Today, Detail, Add a task, Account (section 4 listed 4).
 
