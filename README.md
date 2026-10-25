@@ -26,7 +26,7 @@ What changed after testers: the first Gmail connect no longer fails for new user
 
 ## How it works
 
-1. Gmail search (last 14 days, recruiter-style words, not sent mail) finds candidate emails.
+1. Gmail search (last 14 days, recruiter-style words in the subject, not sent mail) finds candidate emails. Bank, card and bill emails are skipped before the AI sees them.
 2. Job-board alert senders are skipped. One model call per email returns strict JSON. Code then checks that the quoted evidence really is in the email, that a deadline has a date cue, and that a link appears in the email. Anything that fails is dropped, never guessed. A no-date "apply for this role" is treated as an ad and dropped.
 3. Proposals land in Review. The person decides. Only confirmed items reach Today.
 4. Reminders: Catchit is installable (Add to Home Screen) and sends web push notifications. A background job runs every 15 minutes (Supabase pg_cron calling `/api/cron/notify`, because Vercel's free plan allows only one cron a day). It reads new Gmail for connected people and pushes "Catchit found N new", then pushes a reminder about a day before and 2 hours before each confirmed deadline. On iPhone, notifications need iOS 16.4 or later and Catchit added to the Home Screen.
