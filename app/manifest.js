@@ -7,7 +7,7 @@ export default function manifest() {
     start_url: "/today",
     scope: "/",
     display: "standalone",
-    background_color: "#f9ebd7",
+    background_color: "#faf6ef",
     theme_color: "#046a38",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
