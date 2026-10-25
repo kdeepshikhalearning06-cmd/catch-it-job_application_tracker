@@ -6,19 +6,16 @@ import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
 import { googleCalendarUrl } from "../../lib/calendar.mjs";
 import { useItems } from "../../lib/useItems";
-import { dayKey, weekOf, dayMarks, groupForDay, formatDeadline, relative, tomorrowStart } from "../../lib/when.mjs";
+import { dayKey, weekOf, dayMarks, groupForDay, tomorrowStart } from "../../lib/when.mjs";
+import { CompanyLine, Due } from "../../components/ItemBits";
 
 function TodayCard({ item, now, late, onChange }) {
   return (
     <div className={`card ${late ? "late" : ""}`}>
+      <CompanyLine item={item} />
       <Link className="act" href={`/item/${item.id}`}>{item.my_name || item.action}</Link>
       {item.my_name ? <div className="orig">{item.action}</div> : null}
-      <div className="orig">{[item.company, item.role].filter(Boolean).join(" · ")}</div>
-      {item.deadline ? (
-        <div className="meta">{late ? "Was due" : "Due"} <span className="when">{formatDeadline(item.deadline, now)}</span> · {relative(item.deadline, now)}</div>
-      ) : (
-        <div className="meta">No date set</div>
-      )}
+      {item.deadline ? <Due item={item} now={now} late={late} /> : <div className="meta">No date set</div>}
       <div className="btns">
         <button className="b p" onClick={() => onChange(item.id, { status: "done" })}>Done</button>
         <button className="b" onClick={() => onChange(item.id, { snoozed_until: tomorrowStart(now) })}>Snooze</button>
@@ -46,7 +43,7 @@ export default function TodayPage() {
     <AppShell reviewCount={proposedCount} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
       <div className="titlerow">
         <h1 className="page-title">{selected === today ? "Today" : `${selectedDay?.label} ${selectedDay?.num}`}</h1>
-        <Link className="b" href="/add">+ Add</Link>
+        <Link className="b" href="/add">+ Add task</Link>
       </div>
       <NotifyCard />
       <div className="strip" role="tablist" aria-label="This week">
@@ -68,20 +65,22 @@ export default function TodayPage() {
         })}
       </div>
       {loading ? <p className="sub">Loading…</p> : null}
-      {overdue.length ? <div className="grp late">Overdue</div> : null}
+      {overdue.length ? <div className="grp late">Overdue <span className="count">{overdue.length}</span></div> : null}
       {overdue.map((item) => <TodayCard key={item.id} item={item} now={now} late onChange={update} />)}
-      {due.length ? <div className="grp">{selected === today ? "Due today" : "Due"}</div> : null}
+      {due.length ? <div className="grp">{selected === today ? "Due today" : "Due"} <span className="count">{due.length}</span></div> : null}
       {due.map((item) => <TodayCard key={item.id} item={item} now={now} onChange={update} />)}
-      {undated.length ? <div className="grp">No date</div> : null}
+      {undated.length ? <div className="grp">No date <span className="count">{undated.length}</span></div> : null}
       {undated.map((item) => <TodayCard key={item.id} item={item} now={now} onChange={update} />)}
       {!loading && items.length === 0 ? (
         <div className="empty">
+          <span className="ic" aria-hidden="true">📭</span>
           <strong>Nothing here yet.</strong>
           <p>Catchit will fill this once your email is connected. Until then, <Link href="/add">add one yourself</Link>.</p>
         </div>
       ) : null}
       {!loading && items.length > 0 && nothing ? (
         <div className="empty">
+          <span className="ic" aria-hidden="true">{selected === today ? "🎉" : "🗓️"}</span>
           <strong>{selected === today ? "You're clear." : "Nothing due this day."}</strong>
           {proposedCount ? <p>{proposedCount} found by Catchit are waiting. <Link href="/review">Go to Review</Link></p> : <p>Pick another day above.</p>}
         </div>

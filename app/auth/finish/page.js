@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase.mjs";
 import { scanGmail } from "../../../lib/scan.mjs";
+import Logo from "../../../components/Logo";
 
 // Lands here after Google. Takes the session from the address, then reads the inbox once.
 export default function Finish() {
@@ -42,14 +43,22 @@ export default function Finish() {
   }, [router]);
 
   return (
-    <main>
-      <h1>{failed ? "Could not finish" : "One moment"}</h1>
-      <p className={failed ? "error-text" : "lead"}>{message}</p>
-      {failed ? (
-        <p>
-          {expired ? <a className="btn" href="/api/gmail/start">Connect Gmail again</a> : <a href="/login">Back to log in</a>}
-        </p>
-      ) : null}
-    </main>
+    <div className="page">
+      <header className="page-head">
+        <Logo />
+      </header>
+      <main className="page-body">
+        <div className="panel">
+          {failed ? null : <div className="spinner" aria-hidden="true" />}
+          <h1>{failed ? "Could not finish" : "One moment"}</h1>
+          <p className={failed ? "error-text" : "lead"}>{message}</p>
+          {failed ? (
+            <p>
+              {expired ? <a className="btn" href="/api/gmail/start">Connect Gmail again</a> : <a className="btn alt" href="/login">Back to sign in</a>}
+            </p>
+          ) : null}
+        </div>
+      </main>
+    </div>
   );
 }

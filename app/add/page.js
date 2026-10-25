@@ -43,28 +43,33 @@ export default function AddPage() {
 
   return (
     <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={items.some((i) => i.source === "demo")} onReset={reset} onSignOut={signOut} error={error}>
-      <h1 className="page-title">Add one yourself</h1>
-      <p className="sub">Got a task on a call or on WhatsApp? Add it here.</p>
+      <Link className="back" href="/today">← Back to Today</Link>
+      <h1 className="page-title">Add a task</h1>
+      <p className="sub">Got a task on a call or on WhatsApp? Add it here and Catchit will remind you like any other.</p>
       <form className="card" onSubmit={save}>
         <label className="field">What you need to do
-          <input value={action} onChange={(e) => setAction(e.target.value)} placeholder="For example: Send the case study" />
+          <input value={action} onChange={(e) => setAction(e.target.value)} placeholder="For example: Send the case study" autoFocus />
         </label>
-        <label className="field">Company (optional)
-          <input value={company} onChange={(e) => setCompany(e.target.value)} />
-        </label>
-        <label className="field">Role (optional)
-          <input value={role} onChange={(e) => setRole(e.target.value)} />
-        </label>
-        <label className="field">Deadline, India time (optional)
-          <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
-        </label>
-        <label className="field">Link (optional)
-          <input type="url" value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://" />
-        </label>
+        <div className="row2">
+          <label className="field">Company <small>(optional)</small>
+            <input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="For example: Zomato" />
+          </label>
+          <label className="field">Role <small>(optional)</small>
+            <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="For example: APM intern" />
+          </label>
+        </div>
+        <div className="row2">
+          <label className="field">Deadline <small>(India time, optional)</small>
+            <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
+          </label>
+          <label className="field">Link <small>(optional)</small>
+            <input type="url" value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://" />
+          </label>
+        </div>
         {problem ? <p className="error-text">{problem}</p> : null}
         <div className="btns">
           <button className="b p" type="submit" disabled={saving}>{saving ? "Saving…" : "Add to Today"}</button>
-          <Link className="b" href="/today">Cancel</Link>
+          <Link className="b ghost" href="/today">Cancel</Link>
         </div>
       </form>
     </AppShell>
