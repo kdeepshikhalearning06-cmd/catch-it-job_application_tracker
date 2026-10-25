@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -78,4 +78,25 @@ test("pickModel uses OpenRouter when only its key is set, and Claude first when 
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", GEMINI_API_KEY: "g" }).model, "google/gemini-3.5-flash-lite");
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", ANTHROPIC_API_KEY: "a" }).model, "claude-haiku-5-5");
   assert.equal(pickModel({ GEMINI_API_KEY: "g" }).model, "gemini-3.5-flash-lite");
+});
+
+test("drops a no-date 'apply' card from a job ad", () => {
+  const ad = { from: "Glassdoor Jobs <noreply@glassdoor.com>", body: "If you're eager to learn, feel free to apply now or review the job description to learn more." };
+  const text = JSON.stringify({ proposals: [{ company: "Messold", action: "Apply for the Intern - Operations role", deadline: null, evidence: "If you're eager to learn, feel free to apply now or review the job description to learn more.", confidence: "high" }] });
+  const { proposals, problems } = checkProposals(ad, text);
+  assert.equal(proposals.length, 0);
+  assert.equal(problems.length, 0);
+});
+
+test("keeps a real ask that is not a new application", () => {
+  const email = { body: "Please complete your profile (education and work experience) on our careers portal to move forward." };
+  const text = JSON.stringify({ proposals: [{ action: "Complete your candidate profile", deadline: null, evidence: "Please complete your profile (education and work experience) on our careers portal to move forward.", confidence: "high" }] });
+  assert.equal(checkProposals(email, text).proposals.length, 1);
+  assert.equal(isJobAd({ action: "Submit your application form", deadline: null }), false);
+  assert.equal(isJobAd({ action: "Submit a quick application", deadline: null }), true);
+});
+
+test("spots job-board alert senders but not recruiters", () => {
+  for (const f of ["Glassdoor Jobs <noreply@glassdoor.com>", "Indeed <donotreply@match.indeed.com>", "LinkedIn <jobalerts-noreply@linkedin.com>", "jobalerts@naukri-sample.com"]) assert.ok(isJobAlertSender(f), f);
+  for (const f of ["Kanha Mishra <kanha@gmail.com>", "Techverse <no-reply@hire.techverse-test.in>", "Employer via Indeed <abc@indeedemail.com>", "careers@samplemotors.in", "Recruiter via Naukri <info@naukri.com>"]) assert.ok(!isJobAlertSender(f), f);
 });
