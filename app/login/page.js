@@ -65,7 +65,8 @@ export default function LoginPage() {
       <p className="note">
         <a className="btn" href="/api/gmail/start">Connect my Gmail</a>
       </p>
-      <p className="note">Gmail is open to invited testers while the app is in testing. Just looking? <button className="linkbtn" onClick={demo} disabled={busy}>Try the demo with sample emails</button></p>
+      <p className="note">Catchit is a student project, so Google shows a &ldquo;Google hasn&rsquo;t verified this app&rdquo; screen. Tap <b>Advanced</b>, then <b>Go to Catchit</b>. Access is read-only. <a href="/privacy">Privacy</a></p>
+      <p className="note">Just looking? <button className="linkbtn" onClick={demo} disabled={busy}>Try the demo with sample emails</button></p>
       {message ? <p className="note error-text">{message}</p> : null}
       {gmailProblem ? <p className="note error-text">{gmailProblem}</p> : null}
     </main>
