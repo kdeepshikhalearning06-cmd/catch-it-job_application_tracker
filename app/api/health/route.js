@@ -13,6 +13,10 @@ const NAMES = [
   "EVAL_KEY",
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
+  "VAPID_PUBLIC_KEY",
+  "VAPID_PRIVATE_KEY",
+  "VAPID_SUBJECT",
+  "CRON_SECRET",
 ];
 
 export function GET() {

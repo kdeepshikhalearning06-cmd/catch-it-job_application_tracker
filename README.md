@@ -23,6 +23,8 @@ Built for the HelloPM Buildathon 2026. Spec: [SPEC.md](SPEC.md). Plan: [BUILD_PL
 1. Gmail search (last 14 days, recruiter-style words, not sent mail) finds candidate emails.
 2. One model call per email returns strict JSON. Code then checks that the quoted evidence really is in the email, that a deadline has a date cue, and that a link appears in the email. Anything that fails is dropped, never guessed.
 3. Proposals land in Review. The person decides. Only confirmed items reach Today.
+4. Reminders: Catchit is installable (Add to Home Screen) and sends web push notifications. A background job runs every 15 minutes (Supabase pg_cron calling `/api/cron/notify`, because Vercel's free plan allows only one cron a day). It reads new Gmail for connected people and pushes "Catchit found N new", then pushes a reminder about a day before and 2 hours before each confirmed deadline. On iPhone, notifications need iOS 16.4 or later and Catchit added to the Home Screen.
+5. "Add to calendar" opens a prefilled Google Calendar event. No calendar permission is requested.
 
 Accuracy: the extraction is tested on sample emails and on real recruiter emails kept in a private table (not in this repo). See `lib/extract.mjs` and `test/`.
 
@@ -35,7 +37,7 @@ npm run dev
 ```
 
 Environment variables (names only, set them in Vercel or `.env.local`):
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` (optional; used for real inbox mail when set), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DEMO_EMAIL`, `DEMO_PASSWORD`, `EVAL_KEY`, `RESEND_API_KEY`.
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` (optional; used for real inbox mail when set), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DEMO_EMAIL`, `DEMO_PASSWORD`, `EVAL_KEY`, `RESEND_API_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`.
 
 Database: apply the files in `supabase/migrations/` in order.
 

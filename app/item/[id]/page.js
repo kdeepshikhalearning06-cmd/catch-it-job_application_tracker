@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import AppShell from "../../../components/AppShell";
 import { useItems } from "../../../lib/useItems";
 import { formatDeadline, relative } from "../../../lib/when.mjs";
+import { googleCalendarUrl } from "../../../lib/calendar.mjs";
 
 const STAGES = [
   ["applied", "Applied"],
@@ -71,6 +72,7 @@ export default function ItemPage() {
               <button className="b" onClick={() => update(item.id, { status: "confirmed" })}>Mark not done</button>
             )}
             {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
+            {item.deadline ? <a className="b" href={googleCalendarUrl(item)} target="_blank" rel="noreferrer">Add to calendar</a> : null}
             <button className="b" onClick={del}>Delete</button>
           </div>
         </div>
