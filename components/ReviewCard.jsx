@@ -39,8 +39,12 @@ export default function ReviewCard({ item, now, onChange }) {
     );
   }
 
+  const unsure = item.confidence && item.confidence !== "high";
   return (
-    <div className="card">
+    <div className={`card ${unsure ? "unsure" : ""}`}>
+      {unsure ? (
+        <div className="unsure-bar"><span aria-hidden="true">⚠️</span><b>Please check this one.</b> Catchit isn&rsquo;t sure it read the email right.</div>
+      ) : null}
       <CompanyLine item={item} />
       <div className="act">{item.my_name || item.action}</div>
       {item.my_name ? <div className="orig">{item.action}</div> : null}
@@ -50,7 +54,6 @@ export default function ReviewCard({ item, now, onChange }) {
         <div className="meta"><span className="flag">No date found</span> Tap Edit to add one if you know it.</div>
       )}
       {item.evidence ? <blockquote className="quote"><span>From your email</span>&ldquo;{item.evidence}&rdquo;</blockquote> : null}
-      {item.confidence && item.confidence !== "high" ? <div className="meta unsure"><span className="flag warn">Please check</span> Catchit is not sure about this one.</div> : null}
       <div className="btns">
         <button className="b p" onClick={() => onChange(item.id, { status: "confirmed" })}>Confirm</button>
         <button className="b" onClick={() => setEditing(true)}>Edit</button>

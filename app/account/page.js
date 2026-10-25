@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
+import ThemePicker from "../../components/ThemePicker";
 import { useItems } from "../../lib/useItems";
 import { supabase } from "../../lib/supabase.mjs";
 
@@ -59,6 +60,17 @@ export default function AccountPage() {
 
       <div className="grp">Reminders</div>
       <NotifyCard full />
+
+      <div className="grp">Appearance</div>
+      <div className="card rows">
+        <div className="rowi">
+          <div>
+            <b>Theme</b>
+            <p>Auto follows your phone&rsquo;s dark mode setting.</p>
+          </div>
+          <ThemePicker />
+        </div>
+      </div>
 
       <div className="grp">Gmail</div>
       <div className="card rows">
