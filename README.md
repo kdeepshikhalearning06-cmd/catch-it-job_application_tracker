@@ -2,7 +2,7 @@
 
 Catchit catches what companies ask you to do, before it slips.
 
-A fresher applying to several roles a week connects Gmail once. Catchit reads the last 14 days (read-only), finds assessment links, interview invites, exam dates and deadlines, and proposes "do X by Y" with the exact sentence from the email. The user confirms, edits or dismisses. Confirmed items sit on a Today list with a week strip.
+A fresher applying to several roles a week connects Gmail once. Catchit reads the last 30 days on the first scan and 14 days after that (read-only), finds assessment links, interview invites, exam dates and deadlines, and proposes "do X by Y" with the exact sentence from the email. The user confirms, edits or dismisses. Confirmed items sit on a Today list with a week strip.
 
 **Live:** https://catch-it-jobapplicationtracker.vercel.app (use "Try the demo" for a sample inbox, no sign-in needed)
 
@@ -18,7 +18,7 @@ Live and tested by 5 people (4 on their own Gmail). Across testers' inboxes, Cat
 | Review: confirm, edit, dismiss, with a flag on items Catchit isn't sure about | "Share to Catchit" for LinkedIn DMs and WhatsApp |
 | Today: next-up countdown, overdue, due today, coming up, week strip | Google verification (removes the unverified-app screen) |
 | Detail, Add a task, Account (theme, Gmail, delete my data), Privacy | |
-| Gmail connect (read-only, 14 days), background scan every 15 minutes | |
+| Gmail connect (read-only, 30 days first, then 14), background scan every 15 minutes | |
 | Phone notifications a day and 2 hours before, Add to calendar | |
 | Code checks on every AI answer; job-board ads and scam fee requests filtered | |
 
@@ -26,7 +26,7 @@ What changed after testers: the first Gmail connect no longer fails for new user
 
 ## How it works
 
-1. Gmail search (last 14 days, recruiter-style words in the subject or a recruiter-style sender, not sent mail) finds candidate emails. Bank, card and bill emails are skipped before the AI sees them.
+1. Gmail search (30 days on the first scan, then 14, recruiter-style words in the subject or a recruiter-style sender, not sent mail) finds candidate emails. Bank, card and bill emails are skipped before the AI sees them.
 2. Job-board alert senders are skipped. One model call per email returns strict JSON. Code then checks that the quoted evidence really is in the email, that a deadline has a date cue, and that a link appears in the email. Anything that fails is dropped, never guessed. A no-date "apply for this role" is treated as an ad and dropped.
 3. Proposals land in Review. The person decides. Only confirmed items reach Today.
 4. Reminders: Catchit is installable (Add to Home Screen) and sends web push notifications. A background job runs every 15 minutes (Supabase pg_cron calling `/api/cron/notify`, because Vercel's free plan allows only one cron a day). It reads new Gmail for connected people and pushes "Catchit found N new", then pushes a reminder about a day before and 2 hours before each confirmed deadline. On iPhone, notifications need iOS 16.4 or later and Catchit added to the Home Screen.

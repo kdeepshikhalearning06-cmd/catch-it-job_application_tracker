@@ -35,7 +35,7 @@ const BellIcon = () => (
 );
 
 const STEPS = [
-  ["Connect Gmail", "Read-only. Only the last 14 days. We never send or delete anything.", MailIcon],
+  ["Connect Gmail", "Read-only. Only the last 30 days. We never send or delete anything.", MailIcon],
   ["Confirm what we found", "See the exact sentence from the email. Confirm, edit or dismiss.", QuoteIcon],
   ["Get nudged in time", "A phone alert a day before and 2 hours before. One tap to add it to your calendar.", BellIcon],
 ];

@@ -129,7 +129,7 @@ export default function Finish() {
 
 const STEPS = [
   { t: "Signed in with Google", d: "Your Gmail is connected, read-only" },
-  { t: "Reading your job emails", d: "Only the last 14 days, only job-related mail" },
+  { t: "Reading your job emails", d: "Only the last 30 days, only job-related mail" },
   { t: "Finding what companies asked", d: "Tests, interviews, forms and their deadlines" },
   { t: "Ready to review", d: "You confirm each one before it's reminded" },
 ];

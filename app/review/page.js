@@ -19,7 +19,7 @@ export default function ReviewPage() {
   const proposed = items.filter((i) => i.status === "proposed");
 
   const runScan = async () => {
-    setScan({ busy: true, text: "Reading the last 14 days of your email…" });
+    setScan({ busy: true, text: "Reading your recent email…" });
     try {
       const r = await scanGmail();
       await reload();

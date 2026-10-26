@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
 import { CompanyLine } from "../../components/ItemBits";
 import CalendarButton from "../../components/CalendarButton";
 import { useItems } from "../../lib/useItems";
-import { dayKey, weekOf, dayMarks, groupForDay, relative, tomorrowStart, summary, countdown, dayWord, clock, formatDeadline } from "../../lib/when.mjs";
+import { dayKey, weekOf, dayMarks, groupForDay, relative, tomorrowStart, isHidden, summary, countdown, dayWord, clock, formatDeadline } from "../../lib/when.mjs";
 
 const STAGE = { applied: "Applied", assessment: "Assessment", interview: "Interview", offer: "Offer", rejected: "Rejected" };
 
@@ -39,6 +39,11 @@ function TodayCard({ item, now, late, onChange }) {
   );
 }
 
+const backWord = (iso, now) => {
+  const w = dayWord(iso, now);
+  return w === "Today" || w === "Tomorrow" ? w.toLowerCase() : `on ${w}`;
+};
+
 const Group = ({ title, items, late, now, onChange }) =>
   items.length ? (
     <>
@@ -50,6 +55,18 @@ const Group = ({ title, items, late, now, onChange }) =>
 export default function TodayPage() {
   const { loading, items, error, update, reset, signOut, isDemo } = useItems();
   const [now] = useState(() => new Date());
+  // After a snooze, a short bar says when it comes back and offers Undo.
+  const [undo, setUndo] = useState(null);
+  useEffect(() => {
+    if (!undo) return;
+    const t = setTimeout(() => setUndo(null), 6000);
+    return () => clearTimeout(t);
+  }, [undo]);
+  const change = (id, patch) => {
+    update(id, patch);
+    if (patch.snoozed_until) setUndo(items.find((i) => i.id === id) ?? null);
+  };
+  const snoozed = items.filter((i) => i.status === "confirmed" && isHidden(i, now));
   const today = dayKey(now);
   const [selected, setSelected] = useState(today);
   const days = weekOf(now);
@@ -111,10 +128,10 @@ export default function TodayPage() {
       </div>
 
       {loading ? <p className="sub">Loading…</p> : null}
-      <Group title="Overdue" items={overdue} late now={now} onChange={update} />
-      <Group title={isToday ? "Due today" : `Due ${selectedDay?.label} ${selectedDay?.num}`} items={due} now={now} onChange={update} />
-      <Group title="Coming up" items={comingUp} now={now} onChange={update} />
-      <Group title="No date" items={undated} now={now} onChange={update} />
+      <Group title="Overdue" items={overdue} late now={now} onChange={change} />
+      <Group title={isToday ? "Due today" : `Due ${selectedDay?.label} ${selectedDay?.num}`} items={due} now={now} onChange={change} />
+      <Group title="Coming up" items={comingUp} now={now} onChange={change} />
+      <Group title="No date" items={undated} now={now} onChange={change} />
 
       {!loading && items.length === 0 ? (
         <div className="empty">
@@ -128,6 +145,28 @@ export default function TodayPage() {
           <span className="ic" aria-hidden="true">{isToday ? "🎉" : "🗓️"}</span>
           <strong>{isToday ? "You're clear." : "Nothing due this day."}</strong>
           {s.toCheck ? <p>{s.toCheck} found by Catchit are waiting. <Link href="/review">Go to Review</Link></p> : <p>Pick another day above.</p>}
+        </div>
+      ) : null}
+
+      {snoozed.length ? (
+        <>
+          <div className="grp">Snoozed <span className="count">{snoozed.length}</span></div>
+          {snoozed.map((item) => (
+            <div key={item.id} className="snz">
+              <div>
+                <b>{item.my_name || item.action}</b>
+                <small>Back {backWord(item.snoozed_until, now)} · {item.deadline ? `due ${formatDeadline(item.deadline, now)}` : "no date"}</small>
+              </div>
+              <button className="b" onClick={() => update(item.id, { snoozed_until: null })}>Unsnooze</button>
+            </div>
+          ))}
+        </>
+      ) : null}
+
+      {undo ? (
+        <div className="toast" role="status">
+          <span>Snoozed until tomorrow morning.</span>
+          <button onClick={() => { update(undo.id, { snoozed_until: null }); setUndo(null); }}>Undo</button>
         </div>
       ) : null}
 

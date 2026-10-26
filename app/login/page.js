@@ -64,7 +64,7 @@ export default function LoginPage() {
           <a className="btn full" href="/api/gmail/start">Connect my Gmail</a>
           {gmailProblem ? <p className="note error-text">{gmailProblem}</p> : null}
           <ul className="trust">
-            <li>Read-only, and only the last 14 days of email</li>
+            <li>Read-only, and only the last 30 days of email</li>
             <li>Never sends, changes or deletes anything</li>
             <li>Disconnect or delete your data any time</li>
           </ul>

@@ -76,7 +76,7 @@ export default function AccountPage() {
         <div className="rowi">
           <div>
             <b>{isDemo ? "Sample inbox" : "Gmail access"}</b>
-            <p>Catchit reads only the last 14 days, read-only. It never sends, deletes or changes an email.</p>
+            <p>Catchit reads only the last 30 days at most, read-only. It never sends, deletes or changes an email.</p>
           </div>
           {!isDemo ? <a className="b" href="/api/gmail/start">Reconnect</a> : null}
         </div>
