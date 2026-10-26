@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import ReviewCard from "../../components/ReviewCard";
-import NotifyCard from "../../components/NotifyCard";
 import { useItems } from "../../lib/useItems";
 import { scanGmail } from "../../lib/scan.mjs";
 
@@ -18,8 +17,6 @@ export default function ReviewPage() {
     if (new URLSearchParams(window.location.search).get("scan") === "later") setLater(true);
   }, []);
   const proposed = items.filter((i) => i.status === "proposed");
-  const onToday = items.filter((i) => i.status === "confirmed").length;
-  const step = loading || proposed.length ? 1 : 2;
 
   const runScan = async () => {
     setScan({ busy: true, text: "Reading your recent email…" });
@@ -47,23 +44,17 @@ export default function ReviewPage() {
           <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button>
         )}
       </div>
-      <ol className="journey" aria-label="Your steps">
-        <li className={step === 1 ? "now" : "done"}><i>1</i>Check cards</li>
-        <li className={step === 2 ? "now" : ""}><i>2</i>Get reminders</li>
-        <li><i>3</i>Relax</li>
-      </ol>
-      {proposed.length ? <p className="sub">Catchit found these in your emails. Confirm what&rsquo;s right, fix what isn&rsquo;t.</p> : null}
+      <p className="sub">Catchit found these in your emails. Confirm what&rsquo;s right, fix what isn&rsquo;t.</p>
       {later && !scan.text ? (
         <p className="scan-note">Catchit is still reading some of your emails in the background. Anything new shows up here within 15 minutes, and you&rsquo;ll get a notification if reminders are on.</p>
       ) : null}
       {scan.text ? <p className="scan-note">{scan.text}</p> : null}
       {loading ? <p className="sub">Loading…</p> : null}
       {!loading && proposed.length === 0 ? (
-        <div className="alldone">
-          <strong>✅ All checked.</strong>
-          <p>{onToday ? `${onToday} ${onToday === 1 ? "task is" : "tasks are"} on Today. ` : ""}One last step: let Catchit tap your phone before each deadline.</p>
-          <NotifyCard />
-          <Link className="b wide" href="/today">Go to Today</Link>
+        <div className="empty">
+          <span className="ic" aria-hidden="true">✅</span>
+          <strong>All caught up.</strong>
+          <p>Everything Catchit found has been checked. <Link href="/today">See Today</Link></p>
         </div>
       ) : null}
       {proposed.map((item) => (
