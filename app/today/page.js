@@ -5,7 +5,7 @@ import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
 import { CompanyLine } from "../../components/ItemBits";
-import { googleCalendarUrl } from "../../lib/calendar.mjs";
+import CalendarButton from "../../components/CalendarButton";
 import { useItems } from "../../lib/useItems";
 import { dayKey, weekOf, dayMarks, groupForDay, relative, tomorrowStart, summary, countdown, dayWord, clock, formatDeadline } from "../../lib/when.mjs";
 
@@ -32,7 +32,7 @@ function TodayCard({ item, now, late, onChange }) {
           <button className="b p" onClick={() => onChange(item.id, { status: "done" })}>Done</button>
           <button className="b" onClick={() => onChange(item.id, { snoozed_until: tomorrowStart(now) })}>Snooze</button>
           {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
-          {item.deadline && !late ? <a className="b" href={googleCalendarUrl(item)} target="_blank" rel="noreferrer">Add to calendar</a> : null}
+          {!late ? <CalendarButton item={item} /> : null}
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@ const Group = ({ title, items, late, now, onChange }) =>
   ) : null;
 
 export default function TodayPage() {
-  const { loading, items, error, update, reset, signOut } = useItems();
+  const { loading, items, error, update, reset, signOut, isDemo } = useItems();
   const [now] = useState(() => new Date());
   const today = dayKey(now);
   const [selected, setSelected] = useState(today);
@@ -56,7 +56,6 @@ export default function TodayPage() {
   const marks = dayMarks(items, days, now);
   const { overdue, due, undated } = groupForDay(items, selected, now);
   const s = summary(items, now);
-  const isDemo = items.some((i) => i.source === "demo");
   const selectedDay = days.find((d) => d.key === selected);
   const isToday = selected === today;
   const comingUp = isToday ? s.comingUp : [];

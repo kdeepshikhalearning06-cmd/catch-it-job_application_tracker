@@ -14,7 +14,7 @@ export default function DemoButton({ className = "btn" }) {
     setMessage("");
     try {
       await startDemo();
-      router.push("/today");
+      router.push("/auth/finish?demo=1");
     } catch (err) {
       setMessage(err.message);
       setBusy(false);

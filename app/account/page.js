@@ -18,10 +18,9 @@ async function call(path) {
 }
 
 export default function AccountPage() {
-  const { items, user, error, reset, signOut } = useItems();
+  const { items, user, error, reset, signOut, isDemo } = useItems();
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
-  const isDemo = items.some((i) => i.source === "demo");
 
   const disconnect = async () => {
     if (!window.confirm("Stop Catchit from reading your Gmail? Your saved items stay.")) return;

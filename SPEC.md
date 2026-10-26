@@ -184,7 +184,7 @@ What changed from the spec above, so this file matches the product:
 - **Demo:** shared demo account with sample emails and a Reset demo button, as specified.
 - **Detail screen:** stage (applied, assessment, interview, offer, rejected) and notes. "My name" for an item is set in Review's Edit.
 - **Extraction rules learned from real mail:** an event on a date (exam, interview) is an attend action whose deadline is its start or entry time; background notes and later rounds with no date are not actions; evidence may be two sentences; the model reads up to 6,000 characters.
-- **Model:** Gemini by default; Claude is used for real inbox mail when `ANTHROPIC_API_KEY` is set.
+- **Model:** Gemini by default; Claude is used for real inbox mail when `ANTHROPIC_API_KEY` is set. (26 Oct: live model is Groq gpt-oss-120b on the free tier; see section 19.)
 - **Design:** bold, student-first style in the agreed palette (cream, green, orange-red), phone-first.
 - **Not built yet:** morning reminder email, calendar alarm file, test reminder, privacy page with Disconnect and Delete, laptop two-column layout.
 
@@ -211,6 +211,9 @@ Five testers (Anushka, Sulakshay, Prakhar, Prabhanshu, Tulasi). The full log is 
 | Job-board ads became "Apply for the position" cards | Alert senders skipped, prompt rule, no-date "apply" dropped in code | PR #8 |
 | Emails asking for a fee | Shown as "Looks like a scam: do not pay the fee" | PR #5 |
 | AI course live-session invite became a task (Aakash) | Prompt rule: classes and webinars are not job actions; course senders skipped; "live session/webinar" actions dropped in code | PR #12 |
+| Gemini free quota ran out (26 Oct); every scan failed and testers saw "All caught up" | Switched to Groq's free tier (gpt-oss-120b, no card); waits on per-minute limits; two backup models when a daily limit runs out; eval runs in slices | PR #12, #13, #15 |
+| Full eval on the live model (26 Oct): a 6 to 8 PM quiz got the 8 PM end | Prompt: any window shorter than a day is due at its start. Result 38/39 actions, 38/39 dates, 0 invented | PR #14 |
+| Mohammad's spare inbox never read: the 15-minute job ran out of time on the first inboxes every run | Inboxes are visited in random order each run | PR #14 |
 | Self-review of 14 missed scenarios (26 Oct) | Search adds LinkedIn/Naukri messages and hiring platforms in every tab, self-forwarded "Fwd:", Calendly, a 30-day first scan; prompt adds time zones, multi-day test windows, identity/OTP and task scams; reminders and forwarded copies no longer duplicate a task. Eval cases S25 to S31 | PR #12 |
 | Privacy: bank and card emails saying "due" could reach the AI | Search matches the subject only; finance emails skipped before the AI | PR #11 |
 

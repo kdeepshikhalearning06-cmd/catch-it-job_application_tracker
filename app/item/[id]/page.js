@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import AppShell from "../../../components/AppShell";
 import { useItems } from "../../../lib/useItems";
 import { formatDeadline, relative } from "../../../lib/when.mjs";
-import { googleCalendarUrl } from "../../../lib/calendar.mjs";
+import CalendarButton from "../../../components/CalendarButton";
 import { CompanyLine } from "../../../components/ItemBits";
 
 const STAGES = [
@@ -20,7 +20,7 @@ const STAGES = [
 export default function ItemPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { loading, items, error, update, remove, reset, signOut } = useItems();
+  const { loading, items, error, update, remove, reset, signOut, isDemo } = useItems();
   const [now] = useState(() => new Date());
   const item = items.find((i) => String(i.id) === String(id));
   const late = Boolean(item?.deadline && item.status !== "done" && Date.parse(item.deadline) < now.getTime());
@@ -41,7 +41,7 @@ export default function ItemPage() {
   };
 
   return (
-    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={items.some((i) => i.source === "demo")} onReset={reset} onSignOut={signOut} error={error}>
+    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
       <Link className="back" href="/today">← Back to Today</Link>
       {loading ? <p className="sub">Loading…</p> : null}
       {!loading && !item ? (
@@ -81,7 +81,7 @@ export default function ItemPage() {
               <button className="b" onClick={() => update(item.id, { status: "confirmed" })}>Mark not done</button>
             )}
             {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
-            {item.deadline ? <a className="b" href={googleCalendarUrl(item)} target="_blank" rel="noreferrer">Add to calendar</a> : null}
+            <CalendarButton item={item} />
             <button className="b danger" onClick={del}>Delete</button>
           </div>
         </div>
