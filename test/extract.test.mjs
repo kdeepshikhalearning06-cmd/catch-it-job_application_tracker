@@ -128,5 +128,5 @@ test("a reminder or forwarded copy is the same task", () => {
 });
 
 test("prompt covers scams, time zones, windows, forwards and recruiter messages", () => {
-  for (const words of ["Aadhaar", "Telegram", "converted to IST", "window's close", "Forwarded message", "recruiter's message"]) assert.ok(SYSTEM_PROMPT.includes(words), words);
+  for (const words of ["Aadhaar", "Telegram", "converted to IST", "window's close", "Forwarded message", "recruiter's message", "internship cell"]) assert.ok(SYSTEM_PROMPT.includes(words), words);
 });
