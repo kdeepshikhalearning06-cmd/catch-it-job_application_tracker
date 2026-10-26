@@ -5,6 +5,7 @@ import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
 import ThemePicker from "../../components/ThemePicker";
+import { replayTour } from "../../components/FirstRunGuide";
 import { useItems } from "../../lib/useItems";
 import { supabase } from "../../lib/supabase.mjs";
 
@@ -95,6 +96,13 @@ export default function AccountPage() {
             <p>What Catchit reads, keeps and never touches.</p>
           </div>
           <Link className="b" href="/privacy">Read</Link>
+        </div>
+        <div className="rowi">
+          <div>
+            <b>How Catchit works</b>
+            <p>Show the quick tour of Review and Today again.</p>
+          </div>
+          <button className="b" onClick={() => { replayTour(); window.location.href = "/review"; }}>Show tour</button>
         </div>
       </div>
 

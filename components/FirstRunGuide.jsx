@@ -28,6 +28,14 @@ const TOURS = {
 };
 
 const keyFor = (path) => `catchit-tour-${path.slice(1)}`;
+
+// Clears this device's "tour seen" marks so the tour plays again on Review and Today.
+export function replayTour() {
+  try {
+    Object.keys(TOURS).forEach((path) => localStorage.removeItem(keyFor(path)));
+    localStorage.removeItem("catchit-guide-done");
+  } catch {}
+}
 const GAP = 12;
 
 export default function FirstRunGuide({ isDemo }) {
