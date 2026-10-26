@@ -8,7 +8,7 @@ const STEPS = [
   { title: "Catchit reads your job emails", text: "It finds every test, interview and deadline companies sent you, and puts them in Review." },
   { title: "Check each one in Review", text: "Each card shows the exact sentence from the email. Tap Confirm if it's right, Edit to fix it, or Dismiss if it's not for you." },
   { title: "Today is your to-do list", text: "Confirmed items show on Today, day by day. Anything overdue turns red." },
-  { title: "Turn on reminders", text: "Tap \"Turn on reminders\" on Today and allow notifications. You'll get an alert a day before and 2 hours before each deadline." },
+  { title: "Turn on reminders", text: "When you've checked your cards, tap \"Turn on reminders\" and allow notifications. You'll get an alert a day before and 2 hours before each deadline." },
 ];
 
 // A short walkthrough shown the first time someone opens the app, on Review or Today.

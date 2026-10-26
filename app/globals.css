@@ -480,3 +480,16 @@ a.act:hover { color: var(--accent-fg); }
 .snz small { color: var(--muted); }
 .toast { position: fixed; left: 50%; top: 16px; white-space: nowrap; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; background: #15171c; color: #faf6ef; border-radius: 12px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.25); max-width: calc(100vw - 32px); font-size: 0.95rem; }
 .toast button { border: 0; background: transparent; color: #7fd3a3; font-weight: 700; font-size: 0.95rem; padding: 4px 6px; cursor: pointer; }
+
+/* Review: the three steps of the journey, and the "all checked" hand-off to reminders */
+.journey { list-style: none; display: flex; gap: 6px; padding: 0; margin: 10px 0 14px; }
+.journey li { flex: 1; display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--soft); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; line-height: 1.25; }
+.journey i { flex: none; font-style: normal; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 0.72rem; background: var(--line); color: var(--muted); }
+.journey li.now { color: var(--ink); border-color: var(--accent); }
+.journey li.now i { background: var(--accent); color: var(--accent-ink); }
+.journey li.done { color: var(--muted); }
+.journey li.done i { background: var(--accent-soft); color: var(--accent-fg); }
+.alldone { margin-top: 4px; }
+.alldone > strong { display: block; font-family: var(--display); font-size: 1.35rem; letter-spacing: -0.02em; }
+.alldone > p { margin: 4px 0 12px; color: var(--muted); }
+.alldone .wide { width: 100%; justify-content: center; }
