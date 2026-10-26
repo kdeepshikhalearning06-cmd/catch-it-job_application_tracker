@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p className="lead">We read only what we need to find what companies asked you to do, and you can delete all of it at any time.</p>
 
           <div className="promises">
-            <div className="promise"><b>Read-only</b><span>Only the last 14 days of job-related email.</span></div>
+            <div className="promise"><b>Read-only</b><span>Only job-related email from the last 30 days at most.</span></div>
             <div className="promise"><b>Nothing sent</b><span>We never send, delete, label or change an email.</span></div>
             <div className="promise"><b>Yours to delete</b><span>Disconnect or delete everything in one tap.</span></div>
           </div>
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           <section>
             <h2><i aria-hidden="true">📥</i>What we read</h2>
             <ul>
-              <li>Gmail, read-only, only emails from the last 14 days whose subject or sender looks like a recruiter or company (words like interview, assessment, deadline, following up, or an hr@ or careers@ address), messages from hiring platforms such as LinkedIn, Naukri, Superset and Unstop, and emails you forward to yourself. The first scan looks back 30 days. Bank, card and bill emails are skipped before the AI sees them.</li>
+              <li>Gmail, read-only, only recent emails (30 days back on the first scan, then the last 14 days) whose subject or sender looks like a recruiter or company (words like interview, assessment, deadline, following up, or an hr@ or careers@ address), messages from hiring platforms such as LinkedIn, Naukri, Superset and Unstop, and emails you forward to yourself. Bank, card and bill emails are skipped before the AI sees them.</li>
               <li>Your own sent emails, promotions and social updates are skipped.</li>
             </ul>
           </section>

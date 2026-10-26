@@ -4,7 +4,7 @@ import { scanUser, NotConnected } from "../../../../lib/scanUser.mjs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-// Reads the signed-in person's last 14 days of Gmail (read-only), finds actions, and saves them as proposed.
+// Reads the signed-in person's recent Gmail (30 days first, then 14) (read-only), finds actions, and saves them as proposed.
 export async function POST(request) {
   const token = /^Bearer (.+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
   if (!token) return Response.json({ error: "Please sign in." }, { status: 401 });
