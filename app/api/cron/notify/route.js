@@ -28,8 +28,10 @@ export async function GET(request) {
   for (const s of subs ?? []) devices.set(s.user_id, [...(devices.get(s.user_id) ?? []), s]);
 
   // 1. Background Gmail scan. Only new emails are read, so most runs cost one Gmail call per person.
+  // Shuffled, so a slow inbox at the top of the list can't use up every run's time and leave the rest unread.
   const { data: accounts } = await admin.from("gmail_tokens").select("*");
-  for (const saved of accounts ?? []) {
+  const order = [...(accounts ?? [])].sort(() => Math.random() - 0.5);
+  for (const saved of order) {
     const left = BUDGET_MS - (Date.now() - started) - 15000;
     if (left < 5000) break;
     try {
