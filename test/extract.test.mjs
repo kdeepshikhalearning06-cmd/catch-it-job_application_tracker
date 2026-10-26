@@ -128,6 +128,19 @@ test("a reminder or forwarded copy is the same task", () => {
   assert.ok(!sameTask({ company: null, link: null, deadline: null }, { company: null, link: null, deadline: null }));
 });
 
+test("the same ask sent again by one company is one task", () => {
+  const co = "Zoxima Solutions Pvt Ltd";
+  const resend = { company: co, action: "Resend the signed offer letter and all documents", deadline: null };
+  assert.ok(sameTask(resend, { company: co, action: "Resend the signed offer letter and documents", deadline: null }));
+  assert.ok(sameTask(resend, { company: co, action: "Send the signed offer letter and required documents", deadline: "2026-10-16T18:29:59Z" }));
+  assert.ok(sameTask({ company: co, action: "Fill in the relevant details in the attached Excel sheet", deadline: null }, { company: co, action: "Fill in the relevant details in the attached Excel sheet", deadline: null }));
+  // Different asks, other companies, or dates that disagree stay separate.
+  assert.ok(!sameTask(resend, { company: co, action: "Fill in the relevant details in the attached Excel sheet", deadline: null }));
+  assert.ok(!sameTask({ company: "Greenleaf", action: "Complete the online assessment", deadline: null }, { company: "Greenleaf", action: "Attend the interview", deadline: null }));
+  assert.ok(!sameTask({ company: "Greenleaf", action: "Submit the assignment", deadline: "2026-10-28T12:00:00Z" }, { company: "Greenleaf", action: "Submit the assignment", deadline: "2026-11-04T12:00:00Z" }));
+  assert.ok(!sameTask({ company: "Greenleaf", action: "Submit the assignment", deadline: null }, { company: "Quantum", action: "Submit the assignment", deadline: null }));
+});
+
 test("prompt covers scams, time zones, windows, forwards and recruiter messages", () => {
   for (const words of ["Aadhaar", "Telegram", "converted to IST", "window's close", "Forwarded message", "recruiter's message", "internship cell"]) assert.ok(SYSTEM_PROMPT.includes(words), words);
 });
