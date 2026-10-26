@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import AppShell from "../../../components/AppShell";
 import { useItems } from "../../../lib/useItems";
-import { formatDeadline, relative } from "../../../lib/when.mjs";
+import { formatDeadline, relative, toLocalInput, fromLocalInput } from "../../../lib/when.mjs";
 import CalendarButton from "../../../components/CalendarButton";
 import { CompanyLine } from "../../../components/ItemBits";
 
@@ -26,6 +26,35 @@ export default function ItemPage() {
   const late = Boolean(item?.deadline && item.status !== "done" && Date.parse(item.deadline) < now.getTime());
   const [notes, setNotes] = useState("");
   const [problem, setProblem] = useState("");
+  const [editing, setEditing] = useState(null);
+
+  const startEdit = () =>
+    setEditing({
+      action: item.action ?? "",
+      my_name: item.my_name ?? "",
+      company: item.company ?? "",
+      when: toLocalInput(item.deadline),
+      link: item.link ?? "",
+    });
+
+  const saveEdit = async () => {
+    const link = editing.link.trim();
+    if (link && !/^https?:\/\//i.test(link)) return setProblem("Links need to start with https://");
+    setProblem("");
+    try {
+      await update(item.id, {
+        action: editing.action.trim() || item.action,
+        my_name: editing.my_name.trim() || null,
+        company: editing.company.trim() || null,
+        deadline: fromLocalInput(editing.when),
+        link: link || null,
+      });
+      setEditing(null);
+    } catch (err) {
+      setProblem(err.message);
+    }
+  };
+  const field = (key) => ({ value: editing[key], onChange: (e) => setEditing({ ...editing, [key]: e.target.value }) });
 
   useEffect(() => {
     if (item) setNotes(item.notes ?? "");
@@ -47,7 +76,32 @@ export default function ItemPage() {
       {!loading && !item ? (
         <div className="empty"><span className="ic" aria-hidden="true">🔎</span><strong>We couldn&rsquo;t find this one.</strong><p>It may have been deleted. <Link href="/today">Go to Today</Link></p></div>
       ) : null}
-      {item ? (
+      {item && editing ? (
+        <div className="card detail">
+          <h1>Edit this task</h1>
+          <label className="field">What you need to do
+            <input {...field("action")} />
+          </label>
+          <label className="field">My name for this <small>(optional)</small>
+            <input {...field("my_name")} placeholder="For example: Infosys test" />
+          </label>
+          <label className="field">Company
+            <input {...field("company")} />
+          </label>
+          <label className="field">Deadline <small>(India time)</small>
+            <input type="datetime-local" {...field("when")} />
+          </label>
+          <label className="field">Link <small>(optional)</small>
+            <input type="url" {...field("link")} placeholder="https://" />
+          </label>
+          {problem ? <p className="error-text">{problem}</p> : null}
+          <div className="btns">
+            <button className="b p" onClick={saveEdit}>Save</button>
+            <button className="b" onClick={() => setEditing(null)}>Cancel</button>
+          </div>
+        </div>
+      ) : null}
+      {item && !editing ? (
         <div className={`card detail ${late ? "late" : ""}`}>
           <CompanyLine item={item} fallback="No company added" />
           <h1>{item.my_name || item.action}</h1>
@@ -81,6 +135,7 @@ export default function ItemPage() {
               <button className="b" onClick={() => update(item.id, { status: "confirmed" })}>Mark not done</button>
             )}
             {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
+            <button className="b" onClick={startEdit}>Edit</button>
             <CalendarButton item={item} />
             <button className="b danger" onClick={del}>Delete</button>
           </div>
