@@ -43,7 +43,7 @@ export default function PrivacyPage() {
           <section>
             <h2><i aria-hidden="true">🤝</i>Who else sees it</h2>
             <ul>
-              <li>To find the action and deadline, the email text is sent to an AI model (Google Gemini or Anthropic Claude, directly or through OpenRouter) through their API. Paid API plans don&rsquo;t use it to train models. On Google&rsquo;s free tier, Google may use it to improve its products.</li>
+              <li>To find the action and deadline, the email text is sent to an AI model through its provider&rsquo;s API. Today that is Groq, running the open gpt-oss model. Groq says it does not keep what is sent by default, apart from logs kept up to 30 days when it investigates abuse or outages. Catchit can also use Google Gemini or Anthropic Claude (directly or through OpenRouter); on Google&rsquo;s free tier, Google may use the text to improve its products.</li>
               <li>Data is stored in Supabase. Nobody else gets it, and we do not sell or share it.</li>
             </ul>
           </section>

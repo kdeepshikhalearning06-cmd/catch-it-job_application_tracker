@@ -34,6 +34,8 @@ What changed after testers: the first Gmail connect no longer fails for new user
 
 Accuracy: the extraction is tested on sample emails and on real recruiter emails kept in a private table (not in this repo). See `lib/extract.mjs` and `test/`.
 
+Latest full run (26 Oct 2026, live site, Groq gpt-oss-120b, 39 cases: 7 real emails and 32 hard synthetic ones such as Hinglish, missing years, reschedules, GMT times, forwards, scams and a prompt injection): 38 of 39 actions right, 38 of 39 deadlines right after one prompt fix, 0 invented deadlines. The one miss is the prompt-injection newsletter: the model did not obey the hidden instruction but showed a scam warning where nothing was expected. Run it with `/api/eval?key=EVAL_KEY&from=1&to=10` (slices keep the free tier's per-minute limit happy).
+
 ## Run it yourself
 
 ```
@@ -43,10 +45,10 @@ npm run dev
 ```
 
 Environment variables (names only, set them in Vercel or `.env.local`):
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` (optional; used instead of Gemini when set), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DEMO_EMAIL`, `DEMO_PASSWORD`, `EVAL_KEY`, `RESEND_API_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`.
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GROQ_API_KEY` (the live model: free tier, gpt-oss-120b with two backup models when a daily limit runs out), or `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, `OPENROUTER_API_KEY` (order of preference: Claude, OpenRouter, Groq, Gemini), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DEMO_EMAIL`, `DEMO_PASSWORD`, `EVAL_KEY`, `RESEND_API_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `CRON_SECRET`.
 
 Database: apply the files in `supabase/migrations/` in order.
 
 ## Stack
 
-Next.js (App Router) on Vercel, Supabase (auth, Postgres with row-level security), Gemini, OpenRouter or Claude for extraction, Gmail API (read-only).
+Next.js (App Router) on Vercel, Supabase (auth, Postgres with row-level security), Groq (gpt-oss-120b, free tier) for extraction, swappable for Gemini, OpenRouter or Claude, Gmail API (read-only).

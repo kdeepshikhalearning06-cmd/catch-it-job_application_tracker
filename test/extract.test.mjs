@@ -139,3 +139,23 @@ test("Groq calls go to Groq's address, OpenRouter stays the default", async () =
   await callOpenRouter("s", "u", { apiKey: "k", fetchImpl });
   assert.deepEqual(urls, ["https://api.groq.com/openai/v1/chat/completions", "https://openrouter.ai/api/v1/chat/completions"]);
 });
+
+test("Groq moves to the next model when one runs out for the day", async () => {
+  const seen = [];
+  const fetchImpl = async (url, init) => {
+    const { model } = JSON.parse(init.body);
+    seen.push(model);
+    if (model === "openai/gpt-oss-120b") return { ok: false, status: 429, headers: { get: () => null }, text: async () => "Rate limit reached on tokens per day (TPD): Limit 200000" };
+    return { ok: true, json: async () => ({ choices: [{ message: { content: "{}" } }] }) };
+  };
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = fetchImpl;
+  try {
+    const picked = pickModel({ GROQ_API_KEY: "q" });
+    assert.equal(await picked.call("s", "u"), "{}");
+    assert.deepEqual(seen, ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"]);
+    assert.equal(picked.model, "qwen/qwen3.8-27b");
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
