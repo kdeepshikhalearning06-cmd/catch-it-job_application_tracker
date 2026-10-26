@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, SYSTEM_PROMPT } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, callOpenRouter, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, SYSTEM_PROMPT } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -78,6 +78,7 @@ test("pickModel uses OpenRouter when only its key is set, and Claude first when 
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", GEMINI_API_KEY: "g" }).model, "google/gemini-3.5-flash-lite");
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", ANTHROPIC_API_KEY: "a" }).model, "claude-haiku-5-5");
   assert.equal(pickModel({ GEMINI_API_KEY: "g" }).model, "gemini-3.5-flash-lite");
+  assert.equal(pickModel({ GROQ_API_KEY: "q", GEMINI_API_KEY: "g" }).model, "llama-3.3-70b-versatile");
 });
 
 test("drops a no-date 'apply' card from a job ad", () => {
@@ -129,4 +130,12 @@ test("a reminder or forwarded copy is the same task", () => {
 
 test("prompt covers scams, time zones, windows, forwards and recruiter messages", () => {
   for (const words of ["Aadhaar", "Telegram", "converted to IST", "window's close", "Forwarded message", "recruiter's message", "internship cell"]) assert.ok(SYSTEM_PROMPT.includes(words), words);
+});
+
+test("Groq calls go to Groq's address, OpenRouter stays the default", async () => {
+  const urls = [];
+  const fetchImpl = async (url) => { urls.push(url); return { ok: true, json: async () => ({ choices: [{ message: { content: "{}" } }] }) }; };
+  await callOpenRouter("s", "u", { apiKey: "k", fetchImpl, baseUrl: "https://api.groq.com/openai/v1" });
+  await callOpenRouter("s", "u", { apiKey: "k", fetchImpl });
+  assert.deepEqual(urls, ["https://api.groq.com/openai/v1/chat/completions", "https://openrouter.ai/api/v1/chat/completions"]);
 });
