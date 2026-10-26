@@ -5,7 +5,7 @@ import Link from "next/link";
 import AppShell from "../../components/AppShell";
 import NotifyCard from "../../components/NotifyCard";
 import { CompanyLine } from "../../components/ItemBits";
-import { googleCalendarUrl } from "../../lib/calendar.mjs";
+import CalendarButton from "../../components/CalendarButton";
 import { useItems } from "../../lib/useItems";
 import { dayKey, weekOf, dayMarks, groupForDay, relative, tomorrowStart, summary, countdown, dayWord, clock, formatDeadline } from "../../lib/when.mjs";
 
@@ -32,7 +32,7 @@ function TodayCard({ item, now, late, onChange }) {
           <button className="b p" onClick={() => onChange(item.id, { status: "done" })}>Done</button>
           <button className="b" onClick={() => onChange(item.id, { snoozed_until: tomorrowStart(now) })}>Snooze</button>
           {item.link ? <a className="b" href={item.link} target="_blank" rel="noreferrer">Open link</a> : null}
-          {item.deadline && !late ? <a className="b" href={googleCalendarUrl(item)} target="_blank" rel="noreferrer">Add to calendar</a> : null}
+          {!late ? <CalendarButton item={item} /> : null}
         </div>
       </div>
     </div>

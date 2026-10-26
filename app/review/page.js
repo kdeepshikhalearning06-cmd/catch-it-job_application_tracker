@@ -39,7 +39,11 @@ export default function ReviewPage() {
     <AppShell reviewCount={proposed.length} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
       <div className="titlerow">
         <h1 className="page-title">Review</h1>
-        {!isDemo ? <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button> : null}
+        {isDemo ? (
+          <Link className="b" href="/auth/finish?demo=1">Scan my Gmail</Link>
+        ) : (
+          <button className="b" onClick={runScan} disabled={scan.busy}>{scan.busy ? "Scanning…" : "Scan my Gmail"}</button>
+        )}
       </div>
       <p className="sub">Catchit found these in your emails. Confirm what&rsquo;s right, fix what isn&rsquo;t.</p>
       {later && !scan.text ? (
