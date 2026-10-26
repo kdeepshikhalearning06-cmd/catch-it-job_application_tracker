@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, SYSTEM_PROMPT } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -117,4 +117,16 @@ test("spots course senders unless the subject is about hiring", () => {
   assert.ok(isCourseSender("GrowthSchool <team@mail.growthschool.io>", "Masterclass tonight"));
   assert.ok(!isCourseSender("Outskill Careers <careers@outskill.com>", "Interview scheduled: Community Manager"));
   for (const f of ["hr@greenleaf-test.in", "noreply@unstop-sample.com", "Internshala <student@internshala.com>"]) assert.ok(!isCourseSender(f, "Round 1"), f);
+});
+
+test("a reminder or forwarded copy is the same task", () => {
+  const first = { company: "Techverse Labs", link: "https://hr.techverse-test.in/pa", deadline: "2026-10-23T23:59:00+05:30" };
+  assert.ok(sameTask(first, { company: "Techverse", link: "https://hr.techverse-test.in/pa", deadline: "2026-10-23T18:00:00+05:30" }));
+  assert.ok(sameTask(first, { company: "techverse labs", link: null, deadline: "2026-10-23T18:29:00Z" }));
+  assert.ok(!sameTask(first, { company: "Techverse Labs", link: null, deadline: "2026-10-28T17:00:00+05:30" }));
+  assert.ok(!sameTask({ company: null, link: null, deadline: null }, { company: null, link: null, deadline: null }));
+});
+
+test("prompt covers scams, time zones, windows, forwards and recruiter messages", () => {
+  for (const words of ["Aadhaar", "Telegram", "converted to IST", "window's close", "Forwarded message", "recruiter's message"]) assert.ok(SYSTEM_PROMPT.includes(words), words);
 });

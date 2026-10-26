@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { bodyText, header, buildAuthUrl, emailFromIdToken, SEARCH, subjectLooksJobRelated, senderLooksRecruiter, isFinanceEmail } from "../lib/gmail.mjs";
+import { bodyText, header, buildAuthUrl, emailFromIdToken, SEARCH, buildSearch, isForwarded, subjectLooksJobRelated, senderLooksRecruiter, isFinanceEmail } from "../lib/gmail.mjs";
 
 const enc = (s) => Buffer.from(s).toString("base64url");
 
@@ -59,4 +59,16 @@ test("finance emails are skipped before the AI, job emails are not", () => {
 test("recruiter senders are read whatever the subject", () => {
   for (const f of ["hr@greenleaf-test.in", "Talent Team <talent@zestpay-test.in>", "careers@finedge-test.co.in", "Campus Hiring <campus@vertexconsult-test.com>", "Internshala <student@internshala.com>"]) assert.ok(senderLooksRecruiter(f), f);
   for (const f of ["HDFC Bank <estatements@hdfcbank.net>", "Mom <mom@gmail.com>", "Swiggy <noreply@swiggy.in>"]) assert.ok(!senderLooksRecruiter(f), f);
+});
+
+test("search covers hiring platforms in every tab and self-forwarded mail", () => {
+  const q = buildSearch(30);
+  assert.match(q, /^newer_than:30d /);
+  assert.match(SEARCH, /^newer_than:14d /);
+  assert.match(q, /\(-in:sent from:\(messages-noreply@linkedin\.com OR .*joinsuperset\.com.*calendly\.com\)\)/);
+  assert.match(q, /\(from:me to:me subject:\(fwd OR fw\)\)/);
+  assert.ok(isForwarded("Fwd: TPO notice: Infosys drive"));
+  assert.ok(isForwarded("FW: Interview"));
+  assert.ok(!isForwarded("Few steps left"));
+  assert.ok(subjectLooksJobRelated("Message from a recruiter"));
 });
