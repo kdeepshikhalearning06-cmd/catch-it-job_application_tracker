@@ -301,16 +301,17 @@ a.act:hover { color: var(--accent-fg); }
 .steps li { margin: 4px 0; }
 
 /* First-time guide, scan note */
-.guide { background: var(--invert-bg); color: #fff; border-radius: var(--radius); padding: 16px 18px; margin: 4px 0 14px; box-shadow: var(--shadow-lg); }
-.guide .step { font-size: 0.74rem; font-weight: 750; color: #9fd8b7; text-transform: uppercase; letter-spacing: 0.07em; }
-.guide h2 { font-size: 1.12rem; margin: 6px 0 4px; color: #fff; }
-.guide p { margin: 0; color: #d4d0ca; font-size: 0.9rem; }
-.guide .dots { display: flex; gap: 6px; margin-top: 12px; }
-.guide .dots i { width: 18px; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.22); }
-.guide .dots i.on { background: #9fd8b7; }
-.guide .b { min-height: 40px; padding: 8px 16px; background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.3); }
-.guide .b.p { background: #fff; color: #15171c; border-color: #fff; }
-.guide .linkbtn { color: #d4d0ca; margin-left: auto; align-self: center; }
+.tour { position: fixed; inset: 0; z-index: 100; }
+.tour-dim { position: fixed; background: rgba(10, 12, 14, 0.62); }
+.tour-ring { position: fixed; border: 3px solid #5fcb92; border-radius: 14px; pointer-events: none; }
+.tour-tip { position: fixed; background: var(--invert-bg); color: #fff; border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-lg); }
+.tour-tip .step { font-size: 0.74rem; font-weight: 750; color: #9fd8b7; text-transform: uppercase; letter-spacing: 0.07em; }
+.tour-tip h2 { font-size: 1.12rem; margin: 6px 0 4px; color: #fff; }
+.tour-tip p { margin: 0; color: #d4d0ca; font-size: 0.9rem; }
+.tour-tip .btns { margin-top: 12px; }
+.tour-tip .b { min-height: 40px; padding: 8px 16px; background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+.tour-tip .b.p { background: #fff; color: #15171c; border-color: #fff; }
+.tour-tip .linkbtn { color: #d4d0ca; margin-left: auto; align-self: center; }
 .scan-note { background: var(--accent-soft); color: var(--accent-deep); border-radius: 12px; padding: 10px 14px; font-size: 0.88rem; margin: 0 0 12px; }
 
 /* Landing */
