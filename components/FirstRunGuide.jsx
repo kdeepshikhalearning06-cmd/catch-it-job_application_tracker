@@ -41,7 +41,8 @@ export default function FirstRunGuide({ isDemo }) {
   useEffect(() => {
     if (!tour) return;
     try {
-      if (localStorage.getItem(keyFor(path)) === "1") return;
+      // Shown once per device. Someone who already finished the old text guide here isn't new.
+      if (localStorage.getItem(keyFor(path)) === "1" || localStorage.getItem("catchit-guide-done") === "1") return;
     } catch {}
     let tries = 0;
     const timer = setInterval(() => {
