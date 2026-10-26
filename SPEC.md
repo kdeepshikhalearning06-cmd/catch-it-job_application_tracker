@@ -210,6 +210,7 @@ Five testers (Anushka, Sulakshay, Prakhar, Prabhanshu, Tulasi). The full log is 
 | An item due in two days was not on Today | Today shows next up, overdue, due today and coming up | PR #7 |
 | Job-board ads became "Apply for the position" cards | Alert senders skipped, prompt rule, no-date "apply" dropped in code | PR #8 |
 | Emails asking for a fee | Shown as "Looks like a scam: do not pay the fee" | PR #5 |
+| AI course live-session invite became a task (Aakash) | Prompt rule: classes and webinars are not job actions; course senders skipped; "live session/webinar" actions dropped in code | PR #12 |
 | Privacy: bank and card emails saying "due" could reach the AI | Search matches the subject only; finance emails skipped before the AI | PR #11 |
 
 Screens are now 5: Review, Today, Detail, Add a task, Account (section 4 listed 4).

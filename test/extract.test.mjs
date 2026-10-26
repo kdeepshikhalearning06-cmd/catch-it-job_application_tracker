@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -99,4 +99,22 @@ test("keeps a real ask that is not a new application", () => {
 test("spots job-board alert senders but not recruiters", () => {
   for (const f of ["Glassdoor Jobs <noreply@glassdoor.com>", "Indeed <donotreply@match.indeed.com>", "LinkedIn <jobalerts-noreply@linkedin.com>", "jobalerts@naukri-sample.com"]) assert.ok(isJobAlertSender(f), f);
   for (const f of ["Kanha Mishra <kanha@gmail.com>", "Techverse <no-reply@hire.techverse-test.in>", "Employer via Indeed <abc@indeedemail.com>", "careers@samplemotors.in", "Recruiter via Naukri <info@naukri.com>"]) assert.ok(!isJobAlertSender(f), f);
+});
+
+test("drops course live sessions and webinars, keeps interviews on Meet", () => {
+  const body = "Join the AI live session on 26 October at 7:00 PM IST on Google Meet: https://meet.google.com/abc. Your interview is scheduled for 29 October at 3:00 PM IST on Google Meet.";
+  const text = JSON.stringify({ proposals: [
+    { action: "Join the AI live session", deadline: "2026-10-26T19:00:00+05:30", evidence: "Join the AI live session on 26 October at 7:00 PM IST on Google Meet: https://meet.google.com/abc.", confidence: "high" },
+    { action: "Attend the interview", deadline: "2026-10-29T15:00:00+05:30", evidence: "Your interview is scheduled for 29 October at 3:00 PM IST on Google Meet.", confidence: "high" },
+  ] });
+  const out = checkProposals({ body }, text).proposals;
+  assert.deepEqual(out.map((p) => p.action), ["Attend the interview"]);
+  assert.ok(isCourseEvent({ action: "Register for the free webinar" }));
+});
+
+test("spots course senders unless the subject is about hiring", () => {
+  assert.ok(isCourseSender("Outskill <hello@outskill.com>", "Your AI live session starts at 7 PM"));
+  assert.ok(isCourseSender("GrowthSchool <team@mail.growthschool.io>", "Masterclass tonight"));
+  assert.ok(!isCourseSender("Outskill Careers <careers@outskill.com>", "Interview scheduled: Community Manager"));
+  for (const f of ["hr@greenleaf-test.in", "noreply@unstop-sample.com", "Internshala <student@internshala.com>"]) assert.ok(!isCourseSender(f, "Round 1"), f);
 });
