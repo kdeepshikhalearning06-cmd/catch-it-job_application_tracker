@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, callOpenRouter, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, SYSTEM_PROMPT } from "../lib/extract.mjs";
+import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, callOpenRouter, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, isRepeat, SYSTEM_PROMPT } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -139,6 +139,17 @@ test("the same ask sent again by one company is one task", () => {
   assert.ok(!sameTask({ company: "Greenleaf", action: "Complete the online assessment", deadline: null }, { company: "Greenleaf", action: "Attend the interview", deadline: null }));
   assert.ok(!sameTask({ company: "Greenleaf", action: "Submit the assignment", deadline: "2026-10-28T12:00:00Z" }, { company: "Greenleaf", action: "Submit the assignment", deadline: "2026-11-04T12:00:00Z" }));
   assert.ok(!sameTask({ company: "Greenleaf", action: "Submit the assignment", deadline: null }, { company: "Quantum", action: "Submit the assignment", deadline: null }));
+});
+
+test("reading the same email again doesn't add the same interview twice", () => {
+  const first = { gmail_message_id: "m1", company: "Nimbus Fintech", action: "Attend the interview on Google Meet", deadline: "2026-10-27T05:30:00Z", link: "https://meet.google.com/abc-defg-hij", status: "confirmed" };
+  assert.ok(isRepeat([first], { gmail_message_id: "m1", company: "Nimbus Fintech", action: "Attend the interview", deadline: "2026-10-27T11:00:00+05:30", link: "https://meet.google.com/abc-defg-hij" }));
+  assert.ok(isRepeat([{ ...first, status: "dismissed" }], { ...first, action: "Attend the interview", status: undefined }));
+  // Two tasks from one read of one email both stay.
+  const fresh = { gmail_message_id: "m2", company: "Greenleaf", action: "Submit the form", deadline: "2026-10-28T12:00:00Z", link: null, fresh: true };
+  assert.ok(!isRepeat([fresh], { gmail_message_id: "m2", company: "Greenleaf", action: "Complete the test", deadline: "2026-10-28T12:00:00Z", link: null }));
+  // A dismissed task from another email doesn't hide a new one.
+  assert.ok(!isRepeat([{ ...first, gmail_message_id: "m0", status: "dismissed" }], { ...first, gmail_message_id: "m3" }));
 });
 
 test("prompt covers scams, time zones, windows, forwards and recruiter messages", () => {
