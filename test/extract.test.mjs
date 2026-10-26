@@ -78,7 +78,7 @@ test("pickModel uses OpenRouter when only its key is set, and Claude first when 
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", GEMINI_API_KEY: "g" }).model, "google/gemini-3.5-flash-lite");
   assert.equal(pickModel({ OPENROUTER_API_KEY: "x", ANTHROPIC_API_KEY: "a" }).model, "claude-haiku-5-5");
   assert.equal(pickModel({ GEMINI_API_KEY: "g" }).model, "gemini-3.5-flash-lite");
-  assert.equal(pickModel({ GROQ_API_KEY: "q", GEMINI_API_KEY: "g" }).model, "llama-3.3-70b-versatile");
+  assert.equal(pickModel({ GROQ_API_KEY: "q", GEMINI_API_KEY: "g" }).model, "openai/gpt-oss-120b");
 });
 
 test("drops a no-date 'apply' card from a job ad", () => {
