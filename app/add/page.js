@@ -9,7 +9,7 @@ import { fromLocalInput } from "../../lib/when.mjs";
 
 export default function AddPage() {
   const router = useRouter();
-  const { items, error, add, reset, signOut } = useItems();
+  const { items, error, add, reset, signOut, isDemo } = useItems();
   const [action, setAction] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -42,7 +42,7 @@ export default function AddPage() {
   };
 
   return (
-    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={items.some((i) => i.source === "demo")} onReset={reset} onSignOut={signOut} error={error}>
+    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
       <Link className="back" href="/today">← Back to Today</Link>
       <h1 className="page-title">Add a task</h1>
       <p className="sub">Got a task on a call or on WhatsApp? Add it here and Catchit will remind you like any other.</p>

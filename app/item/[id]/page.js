@@ -20,7 +20,7 @@ const STAGES = [
 export default function ItemPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { loading, items, error, update, remove, reset, signOut } = useItems();
+  const { loading, items, error, update, remove, reset, signOut, isDemo } = useItems();
   const [now] = useState(() => new Date());
   const item = items.find((i) => String(i.id) === String(id));
   const late = Boolean(item?.deadline && item.status !== "done" && Date.parse(item.deadline) < now.getTime());
@@ -41,7 +41,7 @@ export default function ItemPage() {
   };
 
   return (
-    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={items.some((i) => i.source === "demo")} onReset={reset} onSignOut={signOut} error={error}>
+    <AppShell reviewCount={items.filter((i) => i.status === "proposed").length} isDemo={isDemo} onReset={reset} onSignOut={signOut} error={error}>
       <Link className="back" href="/today">← Back to Today</Link>
       {loading ? <p className="sub">Loading…</p> : null}
       {!loading && !item ? (

@@ -48,7 +48,7 @@ const Group = ({ title, items, late, now, onChange }) =>
   ) : null;
 
 export default function TodayPage() {
-  const { loading, items, error, update, reset, signOut } = useItems();
+  const { loading, items, error, update, reset, signOut, isDemo } = useItems();
   const [now] = useState(() => new Date());
   const today = dayKey(now);
   const [selected, setSelected] = useState(today);
@@ -56,7 +56,6 @@ export default function TodayPage() {
   const marks = dayMarks(items, days, now);
   const { overdue, due, undated } = groupForDay(items, selected, now);
   const s = summary(items, now);
-  const isDemo = items.some((i) => i.source === "demo");
   const selectedDay = days.find((d) => d.key === selected);
   const isToday = selected === today;
   const comingUp = isToday ? s.comingUp : [];

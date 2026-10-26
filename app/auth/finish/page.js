@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase.mjs";
 import { scanGmail } from "../../../lib/scan.mjs";
+import { markDemo } from "../../../lib/demo.mjs";
 import Logo from "../../../components/Logo";
 
 // Lands here after Google. Takes the session from the address, then reads the inbox once.
@@ -51,6 +52,7 @@ export default function Finish() {
             throw new Error("This sign-in link was already used or has expired.");
           }
         }
+        markDemo(false);
         setStep(1);
         setMessage("This takes up to a minute. Keep this screen open.");
         // If the first pass doesn't finish (slow phone network, busy AI model), the background check

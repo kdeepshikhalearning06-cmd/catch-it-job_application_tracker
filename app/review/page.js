@@ -8,7 +8,7 @@ import { useItems } from "../../lib/useItems";
 import { scanGmail } from "../../lib/scan.mjs";
 
 export default function ReviewPage() {
-  const { loading, items, error, update, reset, signOut, reload } = useItems();
+  const { loading, items, error, update, reset, signOut, reload, isDemo } = useItems();
   const [scan, setScan] = useState({ busy: false, text: "" });
   const [now] = useState(() => new Date());
   const [later, setLater] = useState(false);
@@ -17,7 +17,6 @@ export default function ReviewPage() {
     if (new URLSearchParams(window.location.search).get("scan") === "later") setLater(true);
   }, []);
   const proposed = items.filter((i) => i.status === "proposed");
-  const isDemo = items.some((i) => i.source === "demo");
 
   const runScan = async () => {
     setScan({ busy: true, text: "Reading the last 14 days of your email…" });
