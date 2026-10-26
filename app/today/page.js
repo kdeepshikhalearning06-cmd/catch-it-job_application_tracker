@@ -170,7 +170,10 @@ export default function TodayPage() {
         </div>
       ) : null}
 
-      <Link href="/add" className="fab" aria-label="Add a task">+</Link>
+      <Link href="/add" className="fab" aria-label="Add a task">
+        {/* Drawn, not typed: a "+" character sits off-centre in most fonts. */}
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
+      </Link>
     </AppShell>
   );
 }
