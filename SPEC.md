@@ -29,7 +29,8 @@ A fresher or student who applies to several roles a week, mostly from a phone, w
 **Evidence (real):**
 - Apurva (MMS, 10-15 applications a week) forgot an assessment link that came by email and was dropped from a summer internship.
 - Anushka (5-7 a week, mostly on her phone) missed an interview invite sent by LinkedIn DM while in college.
-- Survey (Typeform, 2 responses so far): 1 of 2 had something slip in the last 2 months, costing an interview.
+- WhatsApp poll and Reddit responses (21 answers, collected by Deepshikha): 18 of 21 had something from a company slip or get noticed late in the last 2 months; 6 missed an online assessment and 8 missed an application deadline because of it. 19 of 21 are reached by companies through email, and 20 of 21 check company messages on their phone at least as much as a laptop.
+- Interviews: 8 in all (including Tulasi, Anushka, Anouksha Verma, Apurva, Monica and Sulakshay); 6 of 8 had a concrete miss.
 - Counter-evidence: Monica keeps a sheet for 15-20 min a day and misses nothing; her college sends reminders. Tulasi does not track and does not care.
 
 **Assumption to test this weekend:** misses are rare (about once in 2 months) but costly, so people will connect Gmail once if it catches even one forgotten deadline.
@@ -190,7 +191,7 @@ What changed from the spec above, so this file matches the product:
 
 ## 18. Change, 25 Oct 2026: push reminders replace the morning email
 
-Survey (21 responses): 16 of 21 check company messages on their phone at least as much as a laptop, so reminders must reach the phone. Decided with Deepshikha:
+WhatsApp poll and Reddit (21 answers): 20 of 21 check company messages on their phone at least as much as a laptop, so reminders must reach the phone. Decided with Deepshikha:
 - **Web push** (installable web app, like yapping.me): "Catchit found N new" after a background Gmail scan, and "Tomorrow:" / "Due soon:" about 24 hours and 2 hours before each confirmed deadline. Nothing else is pushed. Background job every 15 minutes via Supabase pg_cron, plus a daily Vercel cron as a backup.
 - **Google Calendar:** an "Add to calendar" link that opens a prefilled event. Calendar API access was rejected: a second consent screen for little gain.
 - **Morning email:** moved below the line. It lands in the same inbox where things get missed, Resend's free plan cannot send to testers without a verified domain, and the free cron cannot time it.
