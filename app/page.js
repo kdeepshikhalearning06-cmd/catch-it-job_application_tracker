@@ -117,10 +117,10 @@ export default function Home() {
 
         <section className="lp-sec">
           <h2>Tested on real inboxes</h2>
-          <p>Before launch, students tried Catchit on their own Gmail.</p>
+          <p>Before launch, 9 students and freshers tried Catchit, 6 of them on their own Gmail.</p>
           <div className="proof">
-            <div><b>6 of 6</b><span>tasks Catchit found were correct</span></div>
-            <div><b>9 in 10</b><span>deadlines exactly right in our email tests</span></div>
+            <div><b>16 of 17</b><span>real tasks Catchit found were correct</span></div>
+            <div><b>38 of 39</b><span>deadlines exactly right in our email tests</span></div>
             <div><b>0</b><span>made-up deadlines in real inboxes</span></div>
             <div><b>0</b><span>emails sent, changed or deleted</span></div>
           </div>
