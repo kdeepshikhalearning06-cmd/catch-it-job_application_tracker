@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { dueReminders, reminderMessage, foundMessage } from "../lib/remind.mjs";
+import { dueReminders, reminderMessage, foundMessage, reconnectMessage } from "../lib/remind.mjs";
 import { googleCalendarUrl } from "../lib/calendar.mjs";
 
 // Sunday 25 Oct 2026, 10:00 am IST
@@ -13,16 +13,24 @@ test("a day-before reminder inside 24 hours, an hours-before one inside 2 hours"
   assert.deepEqual(got.map((r) => [r.item.id, r.kind]), [["a", "day"], ["b", "hours"]]);
 });
 
-test("nothing for past, undated, unconfirmed, snoozed or already sent items", () => {
+test("nothing for past, undated, dismissed, done, snoozed or already sent items", () => {
   const items = [
     item("past", -1),
     item("nodate", 0, { deadline: null }),
-    item("proposed", 5, { status: "proposed" }),
+    item("dismissed", 5, { status: "dismissed" }),
     item("done", 5, { status: "done" }),
     item("snoozed", 5, { snoozed_until: at(12) }),
     item("sent", 5),
   ];
   assert.deepEqual(dueReminders(items, now, new Set(["sent:day"])), []);
+});
+
+test("an item still waiting in Review is reminded, and the notification says it isn't checked", () => {
+  const got = dueReminders([item("p", 1.5, { status: "proposed" })], now);
+  assert.deepEqual(got.map((r) => [r.item.id, r.kind]), [["p", "hours"]]);
+  const m = reminderMessage(got[0].item, "hours", now);
+  assert.match(m.body, /Not checked yet: tap to confirm\./);
+  assert.equal(m.url, "/item/p");
 });
 
 test("an item already reminded a day before still gets the 2-hour reminder", () => {
@@ -45,9 +53,19 @@ test("the day-before reminder says Today or Tomorrow by India date", () => {
 
 test("found message counts new actions", () => {
   assert.equal(foundMessage([item("a", 3)]).title, "Catchit found 1 new action");
-  const m = foundMessage([item("a", 3), item("b", 4)]);
+  const m = foundMessage([item("a", 3), item("b", 4)], now);
   assert.equal(m.title, "Catchit found 2 new actions");
-  assert.match(m.body, /^Infosys: Complete the assessment and 1 more/);
+  assert.match(m.body, /^Infosys: Complete the assessment, due today, 1:00 pm and 1 more/);
+});
+
+test("found message leads with the soonest deadline", () => {
+  const m = foundMessage([item("a", 30, { company: "TCS" }), item("b", 4, { company: "Wipro", action: "Join the interview" })], now);
+  assert.match(m.body, /^Wipro: Join the interview, due today, 2:00 pm and 1 more\. Tap to review\./);
+  assert.match(foundMessage([item("x", 0, { deadline: null })], now).body, /^Infosys: Complete the assessment\. Tap to review\./);
+});
+
+test("reconnect message opens Today", () => {
+  assert.equal(reconnectMessage().url, "/today");
 });
 
 test("Google Calendar link ends the event at the deadline", () => {

@@ -22,7 +22,10 @@ export async function POST(request) {
     const r = await scanUser(admin, saved, { force });
     return Response.json({ ok: true, email: r.email, found: r.found.length, read: r.read, failed: r.failed, total: r.total, left: r.left });
   } catch (err) {
-    if (err instanceof NotConnected) return Response.json({ error: "not_connected" }, { status: 400 });
+    if (err instanceof NotConnected) {
+      if (err.expired) await admin.from("gmail_tokens").update({ broken_at: new Date().toISOString() }).eq("user_id", user.id);
+      return Response.json({ error: "not_connected" }, { status: 400 });
+    }
     console.error("scan failed", err?.message, err?.code);
     return Response.json({ error: "The scan did not finish. Try again in a minute." }, { status: 500 });
   }

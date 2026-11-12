@@ -38,7 +38,7 @@ export async function GET(request) {
 
     const { error: saveError } = await admin
       .from("gmail_tokens")
-      .upsert({ user_id: userId, email, refresh_token: tokens.refresh_token, connected_at: new Date().toISOString() });
+      .upsert({ user_id: userId, email, refresh_token: tokens.refresh_token, connected_at: new Date().toISOString(), broken_at: null });
     if (saveError) throw saveError;
 
     const { data: verified, error: verifyError } = await anonClient().auth.verifyOtp({

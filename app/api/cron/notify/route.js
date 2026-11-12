@@ -1,7 +1,7 @@
 import { adminClient } from "../../../../lib/admin.mjs";
 import { scanUser, NotConnected } from "../../../../lib/scanUser.mjs";
 import { sendPush, pushReady } from "../../../../lib/push.mjs";
-import { dueReminders, reminderMessage, foundMessage, DAY_BEFORE } from "../../../../lib/remind.mjs";
+import { dueReminders, reminderMessage, foundMessage, reconnectMessage, DAY_BEFORE, REMINDED } from "../../../../lib/remind.mjs";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -10,7 +10,8 @@ const BUDGET_MS = 45000;
 
 // Background job, every 15 minutes (Supabase schedule) plus once a day (Vercel cron).
 // 1. Reads new Gmail for everyone connected and tells them what was found.
-// 2. Sends the day-before and 2-hours-before reminders for confirmed items.
+//    If Google has ended an account's access, it is marked and the person gets one "reconnect" push.
+// 2. Sends the day-before and 2-hours-before reminders for confirmed items and items still in Review.
 export async function GET(request) {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
@@ -29,7 +30,8 @@ export async function GET(request) {
 
   // 1. Background Gmail scan. Only new emails are read, so most runs cost one Gmail call per person.
   // Shuffled, so a slow inbox at the top of the list can't use up every run's time and leave the rest unread.
-  const { data: accounts } = await admin.from("gmail_tokens").select("*");
+  // Accounts whose access has ended are skipped until the person reconnects.
+  const { data: accounts } = await admin.from("gmail_tokens").select("*").is("broken_at", null);
   const order = [...(accounts ?? [])].sort(() => Math.random() - 0.5);
   for (const saved of order) {
     const left = BUDGET_MS - (Date.now() - started) - 15000;
@@ -39,10 +41,18 @@ export async function GET(request) {
       report.scanned += 1;
       report.found += r.found.length;
       const mine = devices.get(saved.user_id);
-      if (r.found.length && mine) report.pushed += await sendPush(admin, mine, foundMessage(r.found));
+      if (r.found.length && mine) report.pushed += await sendPush(admin, mine, foundMessage(r.found, now));
     } catch (err) {
-      if (!(err instanceof NotConnected)) console.error("background scan failed", err?.message);
-      report.errors += 1;
+      if (err instanceof NotConnected && err.expired) {
+        // Mark it once, so the app can show "Reconnect Gmail" and the push goes out only once.
+        await admin.from("gmail_tokens").update({ broken_at: now.toISOString() }).eq("user_id", saved.user_id);
+        const mine = devices.get(saved.user_id);
+        if (mine) report.pushed += await sendPush(admin, mine, reconnectMessage());
+        report.disconnected = (report.disconnected ?? 0) + 1;
+      } else {
+        if (!(err instanceof NotConnected)) console.error("background scan failed", err?.message);
+        report.errors += 1;
+      }
     }
   }
 
@@ -53,7 +63,7 @@ export async function GET(request) {
       .from("items")
       .select("*")
       .in("user_id", users)
-      .eq("status", "confirmed")
+      .in("status", [...REMINDED])
       .neq("source", "demo")
       .gt("deadline", now.toISOString())
       .lte("deadline", new Date(now.getTime() + DAY_BEFORE).toISOString());

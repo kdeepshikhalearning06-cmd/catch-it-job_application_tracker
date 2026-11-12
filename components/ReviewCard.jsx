@@ -54,6 +54,13 @@ export default function ReviewCard({ item, now, onChange }) {
         <div className="meta"><span className="flag">No date found</span> Tap Edit to add one if you know it.</div>
       )}
       {item.evidence ? <blockquote className="quote"><span>From your email</span>&ldquo;{item.evidence}&rdquo;</blockquote> : null}
+      {item.source === "gmail" ? (
+        <div className="seen" role="group" aria-label="Had you seen this email?">
+          <span>Had you already seen this?</span>
+          <button className={`chip ${item.seen_before === "seen" ? "on" : ""}`} aria-pressed={item.seen_before === "seen"} onClick={() => onChange(item.id, { seen_before: "seen" })}>Yes</button>
+          <button className={`chip ${item.seen_before === "missed" ? "on" : ""}`} aria-pressed={item.seen_before === "missed"} onClick={() => onChange(item.id, { seen_before: "missed" })}>No, I&rsquo;d missed it</button>
+        </div>
+      ) : null}
       <div className="btns">
         <button className="b p" onClick={() => onChange(item.id, { status: "confirmed" })}>Confirm</button>
         <button className="b" onClick={() => setEditing(true)}>Edit</button>

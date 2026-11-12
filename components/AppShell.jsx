@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { gmailStatus } from "../lib/scan.mjs";
 import FirstRunGuide from "./FirstRunGuide";
 import Logo from "./Logo";
 
@@ -19,6 +21,11 @@ const Icon = ({ name }) => (
 
 export default function AppShell({ reviewCount, isDemo, onReset, onSignOut, error, children }) {
   const path = usePathname();
+  const [broken, setBroken] = useState(false);
+  useEffect(() => {
+    if (isDemo) return;
+    gmailStatus().then((s) => setBroken(Boolean(s?.broken)));
+  }, [isDemo]);
   const tab = (href, label, icon, count) => (
     <Link href={href} className={`tab ${path === href ? "on" : ""}`} aria-current={path === href ? "page" : undefined}>
       <Icon name={icon} />
@@ -40,6 +47,12 @@ export default function AppShell({ reviewCount, isDemo, onReset, onSignOut, erro
         <div className="banner">
           <span><b>Demo mode.</b> Every email here is a sample.</span>
           <button className="linkbtn" onClick={onReset}>Reset demo</button>
+        </div>
+      ) : null}
+      {broken && !isDemo ? (
+        <div className="banner error">
+          <span><b>Catchit can&rsquo;t read your Gmail.</b> Google ended its access, so new job emails aren&rsquo;t being checked.</span>
+          <a className="b" href="/api/gmail/start">Reconnect Gmail</a>
         </div>
       ) : null}
       {error ? <div className="banner error">Something went wrong: {error}</div> : null}
