@@ -1,5 +1,6 @@
 import Link from "next/link";
 import DemoButton from "../components/DemoButton";
+import RequestAccess from "../components/RequestAccess";
 import Logo, { Wordmark } from "../components/Logo";
 
 const MailIcon = () => (
@@ -147,6 +148,17 @@ export default function Home() {
               </ul>
             </div>
           </div>
+        </section>
+
+        <section className="lp-sec lp-access" id="access">
+          <h2>Can&rsquo;t connect yet? Request access</h2>
+          <p>
+            Catchit is waiting for Google&rsquo;s review, so Google shows an &ldquo;unverified app&rdquo; screen and lets
+            only 100 people connect Gmail for now. To continue on that screen, tap <b>Advanced</b>, then <b>Go to Catchit</b>.
+            If it doesn&rsquo;t let you in, leave your details and I&rsquo;ll add you.
+          </p>
+          <RequestAccess />
+          <p className="warn">Only your name, email and college are saved, to invite you. Nothing is shared.</p>
         </section>
 
         <section className="lp-final">
