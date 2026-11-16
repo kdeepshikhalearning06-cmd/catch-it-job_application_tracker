@@ -10,7 +10,7 @@ Built for the HelloPM Buildathon 2026. Spec: [SPEC.md](SPEC.md). Plan: [BUILD_PL
 
 ## Status (25 Oct 2026, night)
 
-Live and tested by 5 people (4 on their own Gmail). Across testers' inboxes, Catchit found 8 of 10 real actions, all 8 correct, with 0 wrong dates.
+Live and tested by 11 people in October (8 on their own Gmail): 23 of 24 real-task cards correct, 0 wrong dates on real tasks. Since the 12 Nov Gmail-access fix, 6 more accounts have connected, and 8 of 9 "Had you already seen this?" answers were yes.
 
 | Built | Next |
 |---|---|
