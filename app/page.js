@@ -118,11 +118,11 @@ export default function Home() {
 
         <section className="lp-sec">
           <h2>Tested on real inboxes</h2>
-          <p>Before launch, 9 students and freshers tried Catchit, 6 of them on their own Gmail.</p>
+          <p>11 students and freshers tried Catchit in October, 8 of them on their own Gmail. Since the Gmail fix on 12 November, 6 more accounts have connected.</p>
           <div className="proof">
-            <div><b>16 of 17</b><span>real tasks Catchit found were correct</span></div>
-            <div><b>38 of 39</b><span>deadlines exactly right in our email tests</span></div>
-            <div><b>0</b><span>made-up deadlines in real inboxes</span></div>
+            <div><b>23 of 24</b><span>real tasks Catchit found were correct (October testers)</span></div>
+            <div><b>0</b><span>wrong dates on real tasks</span></div>
+            <div><b>8 of 9</b><span>&ldquo;Had you already seen this?&rdquo; answers were yes, so the cards matched real emails</span></div>
             <div><b>0</b><span>emails sent, changed or deleted</span></div>
           </div>
         </section>
