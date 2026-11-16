@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { checkProposals, scoreEmail, extractEmail, toIst, pickModel, callOpenRouter, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, isRepeat, SYSTEM_PROMPT } from "../lib/extract.mjs";
+import { endOfReceivedDay, checkProposals, scoreEmail, extractEmail, toIst, pickModel, callOpenRouter, isJobAd, isJobAlertSender, isCourseSender, isCourseEvent, sameTask, isRepeat, SYSTEM_PROMPT } from "../lib/extract.mjs";
 import { buildSamples, ist } from "../lib/samples.mjs";
 
 const now = new Date("2026-10-22T14:00:00Z");
@@ -182,4 +182,31 @@ test("Groq moves to the next model when one runs out for the day", async () => {
   } finally {
     globalThis.fetch = realFetch;
   }
+});
+
+const todayEmail = {
+  receivedAt: "2026-11-16T04:00:00Z",
+  from: "HelloPM <team@hellopm.example>",
+  subject: "Final reminder",
+  body: "Hi, This is a quick reminder that today, 16th November, is the final deadline to resubmit your updated Buildathon project. Please make sure you submit by today.",
+};
+const todayEvidence = "This is a quick reminder that today, 16th November, is the final deadline to resubmit your updated Buildathon project.";
+
+test("'today is the final deadline' becomes 11:59 pm IST on the day the email was received", () => {
+  const text = JSON.stringify({ proposals: [{ company: "HelloPM", role: null, action: "Resubmit your updated Buildathon project", deadline: null, link: null, evidence: todayEvidence, confidence: "high" }] });
+  const { proposals, problems } = checkProposals(todayEmail, text);
+  assert.equal(problems.length, 0);
+  assert.equal(proposals[0].deadline, "2026-11-16T23:59:00+05:30");
+});
+
+test("a deadline the model already found is not replaced", () => {
+  const text = JSON.stringify({ proposals: [{ company: "HelloPM", role: null, action: "Resubmit", deadline: "2026-11-16T23:30:00+05:30", link: null, evidence: todayEvidence, confidence: "high" }] });
+  assert.equal(checkProposals(todayEmail, text).proposals[0].deadline, "2026-11-16T23:30:00+05:30");
+});
+
+test("no end-of-day deadline without 'today' and a due word, or for scam warnings", () => {
+  assert.equal(endOfReceivedDay(todayEmail, { action: "Reply", evidence: "Please reply when you can." }), null);
+  assert.equal(endOfReceivedDay(todayEmail, { action: "Reply", evidence: "We spoke today." }), null);
+  assert.equal(endOfReceivedDay(todayEmail, { action: "Looks like a scam: do not pay the fee", evidence: "Pay today, the deadline is near." }), null);
+  assert.equal(endOfReceivedDay({ receivedAt: "not a date" }, { action: "x", evidence: "Today is the deadline." }), null);
 });
