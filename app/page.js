@@ -2,6 +2,10 @@ import Link from "next/link";
 import DemoButton from "../components/DemoButton";
 import RequestAccess from "../components/RequestAccess";
 import Logo, { Wordmark } from "../components/Logo";
+import { proofStats } from "../lib/stats.mjs";
+
+// Rebuilt every 5 minutes so the proof numbers below follow the database.
+export const revalidate = 300;
 
 const MailIcon = () => (
   <svg viewBox="0 0 56 56" aria-hidden="true">
@@ -41,7 +45,8 @@ const STEPS = [
   ["Get nudged in time", "A phone alert a day before and 2 hours before. One tap to add it to your calendar.", BellIcon],
 ];
 
-export default function Home() {
+export default async function Home() {
+  const stats = await proofStats();
   return (
     <div className="lp">
       <div className="lp-wrap">
@@ -118,11 +123,11 @@ export default function Home() {
 
         <section className="lp-sec">
           <h2>Tested on real inboxes</h2>
-          <p>11 students and freshers tried Catchit in October, 8 of them on their own Gmail. Since the Gmail fix on 12 November, 6 more accounts have connected.</p>
+          <p>11 students and freshers tried Catchit in October, 8 of them on their own Gmail. Since the Gmail fix on 12 November, {stats.connectedSinceFix} more accounts have connected.</p>
           <div className="proof">
             <div><b>23 of 24</b><span>real tasks Catchit found were correct (October testers)</span></div>
             <div><b>0</b><span>wrong dates on real tasks</span></div>
-            <div><b>8 of 9</b><span>&ldquo;Had you already seen this?&rdquo; answers were yes, so the cards matched real emails</span></div>
+            <div><b>{stats.answered}</b><span>&ldquo;Had you already seen this?&rdquo; answers from other people: {stats.seen} already knew, {stats.missed} had missed it</span></div>
             <div><b>0</b><span>emails sent, changed or deleted</span></div>
           </div>
         </section>
